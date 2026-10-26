@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenrecon.UsersAccess">
+        <div class="o_bsr_dashboard h-100 overflow-auto">
+            <main class="o_bsr_dashboard_shell">
+
+                <aside class="o_bsr_dashboard_sidebar">
+                    <nav class="o_bsr_dashboard_nav">
+                        <span class="o_bsr_dashboard_nav_label">MAIN</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openDashboard">
+                            <i class="fa fa-th-large"/><span>Dashboard</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openProcess">
+                            <i class="fa fa-upload"/><span>Upload VSS File</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">RECONCILIATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openReconciliation">
+                            <i class="fa fa-database"/><span>VSS Import History</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openTransactionReconciliation">
+                            <i class="fa fa-list-alt"/><span>Transaction Reconciliation</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ACCOUNTING</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openVoucherEntries">
+                            <i class="fa fa-file-excel-o"/><span>Voucher Register</span>
+                        </button>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-exchange"/><span>Batch / API Posting</span>
+                        </div>
+
+                        <span class="o_bsr_dashboard_nav_label">MONITORING</span>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-clock-o"/><span>History</span>
+                        </div>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openNotifications">
+                            <i class="fa fa-bell"/><span>Notifications</span>
+                            <span class="o_bsr_dashboard_nav_badge">6</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ADMINISTRATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openUsersAccess">
+                            <i class="fa fa-users"/><span>Users &amp; Access</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openRolesPermissions">
+                            <i class="fa fa-table"/><span>Roles &amp; Permissions</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openMappings">
+                            <i class="fa fa-cog"/><span>VISA Voucher Rules</span>
+                        </button>
+                    </nav>
+                </aside>
+
+                <section class="o_bsr_dashboard_workspace">
+                    <div class="o_bsr_dashboard_content">
+
+                        <header class="o_bsr_dashboard_page_header">
+                            <div>
+                                <h1>User management</h1>
+                                <p>
+                                    <t t-esc="state.summary.total"/> users ·
+                                    <t t-esc="state.summary.roles"/> roles ·
+                                    <t t-esc="state.summary.inactive"/> inactive
+                                </p>
+                            </div>
+                            <div class="o_bsr_dashboard_header_actions">
+                                <input type="text"
+                                       class="o_bsr_search_input"
+                                       placeholder="Search users..."
+                                       t-att-value="state.search"
+                                       t-on-input="onSearch"/>
+                                <button class="o_bsr_dashboard_primary_action" t-on-click="addUser">
+                                    <i class="fa fa-plus"/> Add User
+                                </button>
+                            </div>
+                        </header>
+
+                        <div class="o_bsr_users_layout">
+                            <section class="o_bsr_dashboard_panel">
+                                <div class="o_bsr_dashboard_table_wrap">
+                                    <table class="o_bsr_dashboard_table">
+                                        <thead>
+                                            <tr>
+                                                <th>NAME</th>
+                                                <th>EMAIL</th>
+                                                <th>ROLE(S)</th>
+                                                <th>DEPARTMENT</th>
+                                                <th>STATUS</th>
+                                                <th>LAST LOGIN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="filteredUsers" t-as="u" t-key="u_index">
+                                                <tr t-on-click="() => this.openUser(u)" style="cursor:pointer;">
+                                                    <td><strong t-esc="u.name"/></td>
+                                                    <td t-esc="u.email"/>
+                                                    <td>
+                                                        <t t-foreach="u.roles" t-as="role" t-key="role">
+                                                            <span class="o_bsr_badge is-muted" style="margin-right:4px;" t-esc="role"/>
+                                                        </t>
+                                                    </td>
+                                                    <td t-esc="u.department"/>
+                                                    <td>
+                                                        <span t-att-class="{
+                                                            'o_bsr_badge': true,
+                                                            'is-success': u.status === 'Active',
+                                                            'is-danger': u.status === 'Locked',
+                                                            'is-muted': u.status === 'Inactive'
+                                                        }" t-esc="u.status"/>
+                                                    </td>
+                                                    <td t-esc="u.last_login"/>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <!-- Edit panel -->
+                            <t t-if="state.showEdit and state.selectedUser">
+                                <aside class="o_bsr_user_edit_panel">
+                                    <div class="o_bsr_dashboard_panel">
+                                        <div class="o_bsr_dashboard_panel_header">
+                                            <h2>Edit user</h2>
+                                            <button class="btn btn-link btn-sm" t-on-click="closeEdit">×</button>
+                                        </div>
+                                        <div style="padding:16px;">
+                                            <div class="o_bsr_form_group">
+                                                <label>Full Name</label>
+                                                <input type="text" t-model="state.selectedUser.name"/>
+                                            </div>
+                                            <div class="o_bsr_form_group">
+                                                <label>Employee ID</label>
+                                                <input type="text" t-att-value="state.selectedUser.employee_id" readonly="1"/>
+                                            </div>
+                                            <div class="o_bsr_form_group">
+                                                <label>Email</label>
+                                                <input type="email" t-model="state.selectedUser.email"/>
+                                            </div>
+                                            <div class="o_bsr_form_group">
+                                                <label>Department</label>
+                                                <input type="text" t-att-value="state.selectedUser.department" readonly="1"/>
+                                            </div>
+                                            <div class="o_bsr_form_group">
+                                                <label>Assigned Role(s)</label>
+                                                <div class="o_bsr_chip_list">
+                                                    <t t-foreach="state.available_roles" t-as="role" t-key="role.id">
+                                                        <label class="o_bsr_chip">
+                                                            <input type="checkbox"
+                                                                   t-att-checked="isRoleSelected(role.id)"
+                                                                   t-on-change="(ev) => this.toggleRole(role.id, ev)"/>
+                                                            <span t-esc="role.name"/>
+                                                        </label>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                            <div class="o_bsr_form_group">
+                                                <label>Scheme Access</label>
+                                                <div class="o_bsr_chip_list">
+                                                    <t t-foreach="state.selectedUser.scheme_access" t-as="s" t-key="s">
+                                                        <span class="o_bsr_chip is-scheme" t-esc="s"/>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                            <div class="o_bsr_form_group" style="display:flex;align-items:center;justify-content:space-between;">
+                                                <label style="margin:0;">Account Status</label>
+                                                <label class="o_bsr_switch">
+                                                    <input type="checkbox" t-model="state.selectedUser.active"/>
+                                                    <span class="o_bsr_slider"/>
+                                                </label>
+                                            </div>
+                                            <div style="display:flex;gap:10px;margin-top:18px;">
+                                                <button class="o_bsr_dashboard_btn_secondary" style="flex:1;"
+                                                        t-on-click="resetPassword">
+                                                    Reset Password
+                                                </button>
+                                                <button class="o_bsr_dashboard_btn_secondary" style="flex:1;"
+                                                        t-on-click="openUserInOdoo">
+                                                    Open in Odoo
+                                                </button>
+                                                <button class="o_bsr_dashboard_primary_action" style="flex:1;"
+                                                        t-on-click="saveUser">
+                                                    Save Changes
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aside>
+                            </t>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </t>
+</templates>

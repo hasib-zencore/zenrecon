@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="report_code_110" model="bsr.accounting.report.code">
+        <field name="code">VSS-110</field>
+        <field name="sequence">110</field>
+    </record>
+    <record id="report_code_120" model="bsr.accounting.report.code">
+        <field name="code">VSS-120</field>
+        <field name="sequence">120</field>
+    </record>
+    <record id="report_code_130" model="bsr.accounting.report.code">
+        <field name="code">VSS-130</field>
+        <field name="sequence">130</field>
+    </record>
+    <record id="report_code_140" model="bsr.accounting.report.code">
+        <field name="code">VSS-140</field>
+        <field name="sequence">140</field>
+    </record>
+    <record id="report_code_210" model="bsr.accounting.report.code">
+        <field name="code">VSS-210</field>
+        <field name="sequence">210</field>
+    </record>
+</odoo>

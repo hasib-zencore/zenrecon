@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenrecon.Dashboard">
+        <div class="o_bsr_dashboard h-100 overflow-auto">
+            <main class="o_bsr_dashboard_shell">
+
+                <!-- ========== SIDEBAR ========== -->
+                <aside class="o_bsr_dashboard_sidebar">
+                    <nav class="o_bsr_dashboard_nav">
+                        <span class="o_bsr_dashboard_nav_label">MAIN</span>
+                        <button class="o_bsr_dashboard_nav_item active" t-on-click="openDashboard">
+                            <i class="fa fa-th-large"/><span>Dashboard</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openProcess">
+                            <i class="fa fa-upload"/><span>Upload VSS File</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">RECONCILIATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openReconciliation">
+                            <i class="fa fa-database"/><span>VSS Import History</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openTransactionReconciliation">
+                            <i class="fa fa-list-alt"/><span>Transaction Reconciliation</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ACCOUNTING</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openVoucherEntries">
+                            <i class="fa fa-file-excel-o"/><span>Voucher Register</span>
+                        </button>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-exchange"/><span>Batch / API Posting</span>
+                        </div>
+
+                        <span class="o_bsr_dashboard_nav_label">MONITORING</span>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-clock-o"/><span>History</span>
+                        </div>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openNotifications">
+                            <i class="fa fa-bell"/><span>Notifications</span>
+                            <span class="o_bsr_dashboard_nav_badge">6</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ADMINISTRATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openUsersAccess">
+                            <i class="fa fa-users"/><span>Users &amp; Access</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openRolesPermissions">
+                            <i class="fa fa-table"/><span>Roles &amp; Permissions</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openMappings">
+                            <i class="fa fa-cog"/><span>VISA Voucher Rules</span>
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- ========== WORKSPACE ========== -->
+                <section class="o_bsr_dashboard_workspace">
+                    <div class="o_bsr_dashboard_content">
+
+                        <!-- Page header -->
+                        <header class="o_bsr_dashboard_page_header">
+                            <div>
+                                <h1>Daily Reconciliation overview</h1>
+                                <p>
+                                    Business date <t t-esc="state.business_date"/>
+                                    · Last updated <t t-esc="state.last_updated"/>
+                                </p>
+                            </div>
+                            <div class="o_bsr_dashboard_header_actions">
+                                <div class="o_bsr_dashboard_date_chip">
+                                    <label>Business Date:</label>
+                                    <input type="date"
+                                        class="o_bsr_date_input"
+                                        t-att-value="state.business_date_raw"
+                                        t-on-change="onBusinessDateChange"/>
+                                </div>
+                                <button class="o_bsr_dashboard_btn_secondary" t-on-click="onRefresh">
+                                    <i class="fa fa-refresh"/> Refresh
+                                </button>
+                                <button class="o_bsr_dashboard_primary_action">
+                                    <i class="fa fa-download"/> Export Summary
+                                </button>
+                            </div>
+                        </header>
+
+                        <!-- KPI cards -->
+                        <section class="o_bsr_dashboard_metrics" aria-label="Operational summary">
+                            <div class="o_bsr_dashboard_metric">
+                                <span>TRANSACTIONS PROCESSED</span>
+                                <strong t-esc="formatNumber(state.transactions_processed)"/>
+                                <small class="is-success">
+                                    <i class="fa fa-arrow-up"/> <t t-esc="state.transactions_trend"/>% vs yesterday
+                                </small>
+                            </div>
+                            <div class="o_bsr_dashboard_metric">
+                                <span>SCHEMES GROSS RECONCILED</span>
+                                <strong>
+                                    <t t-esc="state.schemes_reconciled"/> / <t t-esc="state.schemes_total"/>
+                                </strong>
+                                <small>1 scheme in variance</small>
+                            </div>
+                            <div class="o_bsr_dashboard_metric" t-on-click="openReports" role="button">
+                                <span>RECONCILIATIONS EXCEPTIONS</span>
+                                <strong class="is-danger" t-esc="state.exceptions"/>
+                                <small class="is-danger" t-esc="formatAmount(state.unreconciled_amount) + ' Unreconciled amount'"/>
+                            </div>
+                            <div class="o_bsr_dashboard_metric" t-on-click="openReports" role="button">
+                                <span>VOUCHERS PENDING</span>
+                                <strong t-esc="state.pending_vouchers"/>
+                                <small>Awaiting approval</small>
+                            </div>
+                            <div class="o_bsr_dashboard_metric">
+                                <span>FILES MISSING</span>
+                                <strong class="is-danger" t-esc="state.files_missing"/>
+                                <small class="is-danger" t-esc="state.files_missing_detail"/>
+                            </div>
+                        </section>
+
+                        <!-- Two-column body -->
+                        <div class="o_bsr_dashboard_body">
+
+                            <!-- Left: Scheme table -->
+                            <section class="o_bsr_dashboard_panel o_bsr_dashboard_scheme_panel">
+                                <div class="o_bsr_dashboard_panel_header">
+                                    <h2>Scheme-wise reconciliation status</h2>
+                                    <a href="#" class="o_bsr_dashboard_link">View all →</a>
+                                </div>
+                                <div class="o_bsr_dashboard_table_wrap">
+                                    <table class="o_bsr_dashboard_table">
+                                        <thead>
+                                            <tr>
+                                                <th>SCHEME</th>
+                                                <th>SOURCE FILE</th>
+                                                <th>GROSS RECON</th>
+                                                <th>DETAILED %</th>
+                                                <th>EXCEPTION</th>
+                                                <th>VOUCHER STATUS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="state.schemes" t-as="row" t-key="row.name">
+                                                <tr>
+                                                    <td><strong t-esc="row.name"/></td>
+                                                    <td>
+                                                        <span t-att-class="'o_bsr_badge ' + (row.source === 'Missing' ? 'is-danger' : 'is-success')"
+                                                              t-esc="row.source"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-if="row.gross !== '—'"
+                                                              t-att-class="'o_bsr_badge ' + (row.gross === 'Variance' ? 'is-danger' : 'is-success')"
+                                                              t-esc="row.gross"/>
+                                                        <span t-else="">—</span>
+                                                    </td>
+                                                    <td t-esc="row.detailed"/>
+                                                    <td t-esc="row.exception"/>
+                                                    <td>
+                                                        <span t-if="row.voucher !== '—'"
+                                                              t-att-class="{
+                                                                  'o_bsr_badge': true,
+                                                                  'is-success': row.voucher === 'Posted',
+                                                                  'is-warning': row.voucher === 'Pending',
+                                                                  'is-muted': row.voucher === 'Not Generated'
+                                                              }"
+                                                              t-esc="row.voucher"/>
+                                                        <span t-else="">—</span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <!-- Right column -->
+                            <div class="o_bsr_dashboard_right">
+
+                                <!-- Donut chart -->
+                                <section class="o_bsr_dashboard_panel o_bsr_dashboard_chart_panel">
+                                    <div class="o_bsr_dashboard_panel_header">
+                                        <h2>Overall reconciliation rate</h2>
+                                    </div>
+                                    <div class="o_bsr_dashboard_chart_body">
+                                        <div class="o_bsr_dashboard_chart_canvas">
+                                            <canvas t-ref="reconChart"/>
+                                            <div class="o_bsr_dashboard_chart_center">
+                                                <strong t-esc="state.recon_rate + '%'"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_bsr_dashboard_chart_legend">
+                                            <div class="o_bsr_legend_item">
+                                                <span class="o_bsr_dot is-success"/> Reconciled
+                                                <strong t-esc="state.recon_rate + '%'"/>
+                                            </div>
+                                            <div class="o_bsr_legend_item">
+                                                <span class="o_bsr_dot is-warning"/> Pending
+                                                <strong t-esc="state.recon_pending + '%'"/>
+                                            </div>
+                                            <div class="o_bsr_legend_item">
+                                                <span class="o_bsr_dot is-danger"/> Exceptions
+                                                <strong t-esc="state.recon_exceptions + '%'"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- Recent activity -->
+                                <section class="o_bsr_dashboard_panel o_bsr_dashboard_activity_panel">
+                                    <div class="o_bsr_dashboard_panel_header">
+                                        <h2>Recent reconciliation activity</h2>
+                                        <a href="#" class="o_bsr_dashboard_link">All</a>
+                                    </div>
+                                    <ul class="o_bsr_dashboard_activity_list">
+                                        <t t-foreach="state.recent_activity" t-as="item" t-key="item_index">
+                                            <li t-att-class="'o_bsr_activity_item is-' + item.type">
+                                                <span class="o_bsr_activity_icon">
+                                                    <i t-att-class="{
+                                                        'fa fa-exclamation-triangle': item.type === 'warning',
+                                                        'fa fa-check-circle': item.type === 'success',
+                                                        'fa fa-circle-o-notch': item.type === 'info'
+                                                    }"/>
+                                                </span>
+                                                <div>
+                                                    <strong t-esc="item.title"/>
+                                                    <small t-esc="item.detail"/>
+                                                </div>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </t>
+</templates>

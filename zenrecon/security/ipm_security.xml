@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_bsr_ipm_import_company" model="ir.rule">
+        <field name="name">Mastercard imports: allowed companies</field>
+        <field name="model_id" ref="model_bsr_ipm_import"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_bsr_ipm_record_company" model="ir.rule">
+        <field name="name">Mastercard records: allowed companies</field>
+        <field name="model_id" ref="model_bsr_ipm_record"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_bsr_ipm_field_company" model="ir.rule">
+        <field name="name">Mastercard fields: allowed companies</field>
+        <field name="model_id" ref="model_bsr_ipm_field"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_bsr_ipm_error_company" model="ir.rule">
+        <field name="name">Mastercard errors: allowed companies</field>
+        <field name="model_id" ref="model_bsr_ipm_parse_error"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>

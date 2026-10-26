@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenrecon.VoucherEntries">
+        <div class="o_bsr_dashboard h-100 overflow-auto">
+            <main class="o_bsr_dashboard_shell">
+
+                <!-- Sidebar (same style as dashboard) -->
+                <aside class="o_bsr_dashboard_sidebar">
+                    <nav class="o_bsr_dashboard_nav">
+                        <span class="o_bsr_dashboard_nav_label">MAIN</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openDashboard">
+                            <i class="fa fa-th-large"/><span>Dashboard</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openProcess">
+                            <i class="fa fa-upload"/><span>Upload VSS File</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">RECONCILIATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openReconciliation">
+                            <i class="fa fa-database"/><span>VSS Import History</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openTransactionReconciliation">
+                            <i class="fa fa-list-alt"/><span>Transaction Reconciliation</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ACCOUNTING</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openVoucherEntries">
+                            <i class="fa fa-file-excel-o"/><span>Voucher Register</span>
+                        </button>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-exchange"/><span>Batch / API Posting</span>
+                        </div>
+
+                        <span class="o_bsr_dashboard_nav_label">MONITORING</span>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-clock-o"/><span>History</span>
+                        </div>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openNotifications">
+                            <i class="fa fa-bell"/><span>Notifications</span>
+                            <span class="o_bsr_dashboard_nav_badge">6</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ADMINISTRATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openUsersAccess">
+                            <i class="fa fa-users"/><span>Users &amp; Access</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openRolesPermissions">
+                            <i class="fa fa-table"/><span>Roles &amp; Permissions</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openMappings">
+                            <i class="fa fa-cog"/><span>VISA Voucher Rules</span>
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Workspace -->
+                <section class="o_bsr_dashboard_workspace">
+                    <div class="o_bsr_dashboard_content">
+
+                        <header class="o_bsr_dashboard_page_header">
+                            <div>
+                                <h1>Ready for accounting entry</h1>
+                                <p>
+                                    Business date <t t-esc="state.business_date"/>
+                                    · Vouchers generated from reconciled batches
+                                </p>
+                            </div>
+                            <div class="o_bsr_dashboard_header_actions">
+                                <div class="o_bsr_dashboard_date_chip">
+                                    <label>Business Date:</label>
+                                    <input type="date"
+                                           class="o_bsr_date_input"
+                                           t-att-value="state.business_date_raw"
+                                           t-on-change="onBusinessDateChange"/>
+                                </div>
+                                <button class="o_bsr_dashboard_btn_secondary" t-on-click="onRefresh">
+                                    <i class="fa fa-refresh"/> Refresh
+                                </button>
+                            </div>
+                        </header>
+
+                        <!-- Scheme table -->
+                        <section class="o_bsr_dashboard_panel" style="margin-bottom:16px;">
+                            <div class="o_bsr_dashboard_table_wrap">
+                                <table class="o_bsr_dashboard_table">
+                                    <thead>
+                                        <tr>
+                                            <th>SCHEME</th>
+                                            <th>RECONCILED AMOUNT</th>
+                                            <th>GL MAPPING</th>
+                                            <th>VOUCHER STATUS</th>
+                                            <th>VOUCHER NO.</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.schemes" t-as="row" t-key="row.scheme">
+                                            <tr t-att-class="state.selectedScheme === row.scheme ? 'o_bsr_row_selected' : ''"
+                                                t-on-click="() => this.selectScheme(row)"
+                                                style="cursor:pointer;">
+                                                <td><strong t-esc="row.scheme"/></td>
+                                                <td t-esc="formatAmount(row.reconciled_amount)"/>
+                                                <td>
+                                                    <span t-att-class="'o_bsr_badge ' + (row.gl_mapping === 'Configured' ? 'is-success' : 'is-danger')"
+                                                          t-esc="row.gl_mapping"/>
+                                                </td>
+                                                <td>
+                                                    <span t-att-class="{
+                                                        'o_bsr_badge': true,
+                                                        'is-success': row.voucher_status === 'Posted',
+                                                        'is-warning': row.voucher_status === 'Pending Approval',
+                                                        'is-danger': row.voucher_status === 'Exception',
+                                                        'is-muted': row.voucher_status === 'Not Generated' || row.voucher_status === 'Draft'
+                                                    }" t-esc="row.voucher_status"/>
+                                                </td>
+                                                <td t-esc="row.voucher_no"/>
+                                                <td>
+                                                    <button t-if="row.can_approve"
+                                                            class="btn btn-primary btn-sm"
+                                                            t-on-click.stop="() => this.openVoucher(row.report_id)">
+                                                        Review &amp; Approve
+                                                    </button>
+                                                    <button t-elif="row.can_view"
+                                                            class="btn btn-secondary btn-sm"
+                                                            t-on-click.stop="() => this.openVoucher(row.report_id)">
+                                                        View Voucher
+                                                    </button>
+                                                    <button t-elif="row.can_generate"
+                                                            class="btn btn-secondary btn-sm" disabled="1">
+                                                        Generate
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <!-- Detail panel -->
+                        <t t-if="state.detail">
+                            <section class="o_bsr_dashboard_panel">
+                                <div class="o_bsr_dashboard_panel_header" style="display:flex;justify-content:space-between;align-items:center;">
+                                    <div>
+                                        <h2 t-esc="state.detail.title"/>
+                                        <p style="margin:2px 0 0;font-size:.72rem;color:#69717b;" t-esc="state.detail.subtitle"/>
+                                    </div>
+                                    <span t-att-class="{
+                                        'o_bsr_badge': true,
+                                        'is-success': state.detail.status === 'Posted',
+                                        'is-warning': state.detail.status === 'Pending Approval',
+                                        'is-danger': state.detail.status === 'Exception',
+                                        'is-muted': true
+                                    }" t-esc="state.detail.status"/>
+                                </div>
+
+                                <div style="padding:14px 16px;">
+                                    <p style="font-size:.78rem;color:#444;margin-bottom:14px;">
+                                        <strong>Narration:</strong>
+                                        <t t-esc="state.detail.narration"/>
+                                    </p>
+
+                                    <table class="o_bsr_dashboard_table">
+                                        <thead>
+                                            <tr>
+                                                <th>GL ACCOUNT</th>
+                                                <th>ACCOUNT NAME</th>
+                                                <th class="text-end">DEBIT</th>
+                                                <th class="text-end">CREDIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="state.detail.lines" t-as="line" t-key="line_index">
+                                                <tr>
+                                                    <td t-esc="line.gl_account"/>
+                                                    <td t-esc="line.account_name"/>
+                                                    <td class="text-end" t-esc="line.debit ? formatAmount(line.debit) : '–'"/>
+                                                    <td class="text-end" t-esc="line.credit ? formatAmount(line.credit) : '–'"/>
+                                                </tr>
+                                            </t>
+                                            <tr style="font-weight:700;background:#f8fafb;">
+                                                <td colspan="2">Total</td>
+                                                <td class="text-end" t-esc="formatAmount(state.detail.debit_total)"/>
+                                                <td class="text-end" t-esc="formatAmount(state.detail.credit_total)"/>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+                                        <button class="o_bsr_dashboard_btn_secondary">Send Back</button>
+                                        <button class="o_bsr_dashboard_primary_action"
+                                                t-if="state.detail.report_id"
+                                                t-on-click="() => this.openVoucher(state.detail.report_id)">
+                                            Open Voucher
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                        </t>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_bank_reconciliation" model="ir.module.category">
+        <field name="name">Bank Reconciliation</field>
+        <field name="description">VSS matching, GL configuration, and voucher-report permissions</field>
+        <field name="sequence">36</field>
+    </record>
+    <record id="privilege_bsr_access" model="res.groups.privilege">
+        <field name="name">Bank Reconciliation Access</field>
+        <field name="category_id" ref="module_category_bank_reconciliation"/>
+    </record>
+    <record id="privilege_bsr_approval" model="res.groups.privilege">
+        <field name="name">Bank Reconciliation Approval</field>
+        <field name="category_id" ref="module_category_bank_reconciliation"/>
+    </record>
+
+    <record id="group_bsr_report_operator" model="res.groups">
+        <field name="name">Report Operator</field>
+        <field name="privilege_id" ref="privilege_bsr_access"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="group_bsr_configuration_manager" model="res.groups">
+        <field name="name">Configuration Administrator</field>
+        <field name="privilege_id" ref="privilege_bsr_access"/>
+        <field name="implied_ids" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="group_bsr_report_checker" model="res.groups">
+        <field name="name">Report Checker / Approver</field>
+        <field name="privilege_id" ref="privilege_bsr_approval"/>
+        <field name="implied_ids" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+
+    <record id="rule_bsr_accounting_configuration_company" model="ir.rule">
+        <field name="name">Configurations by company</field>
+        <field name="model_id" ref="model_bsr_accounting_configuration"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_filter_option_company" model="ir.rule">
+        <field name="name">Source filter options by company</field>
+        <field name="model_id" ref="model_bsr_accounting_filter_option"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_run_company" model="ir.rule">
+        <field name="name">Configuration runs by company</field>
+        <field name="model_id" ref="model_bsr_accounting_run"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_visa_source_option_company" model="ir.rule">
+        <field name="name">VISA source values by company</field>
+        <field name="model_id" ref="model_bsr_visa_source_option"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_visa_setup_company" model="ir.rule">
+        <field name="name">VISA setups by company</field>
+        <field name="model_id" ref="model_bsr_visa_setup"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_visa_dimension_option_company" model="ir.rule">
+        <field name="name">VISA selection values by company</field>
+        <field name="model_id" ref="model_bsr_visa_dimension_option"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_configuration_group_company" model="ir.rule">
+        <field name="name">VISA configuration groups by company</field>
+        <field name="model_id" ref="model_bsr_accounting_configuration_group"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_mapping_company" model="ir.rule">
+        <field name="name">Configuration lines by company</field>
+        <field name="model_id" ref="model_bsr_accounting_mapping"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_report_company" model="ir.rule">
+        <field name="name">Voucher reports by company</field>
+        <field name="model_id" ref="model_bsr_accounting_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_voucher_company" model="ir.rule">
+        <field name="name">Vouchers by company</field>
+        <field name="model_id" ref="model_bsr_accounting_voucher"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_voucher_line_company" model="ir.rule">
+        <field name="name">Voucher lines by company</field>
+        <field name="model_id" ref="model_bsr_accounting_voucher_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+    <record id="rule_bsr_accounting_voucher_issue_company" model="ir.rule">
+        <field name="name">Voucher issues by company</field>
+        <field name="model_id" ref="model_bsr_accounting_voucher_issue"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('group_bsr_report_operator'))]"/>
+    </record>
+</odoo>

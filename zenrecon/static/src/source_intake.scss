@@ -1,0 +1,60 @@
+.o_zenrecon_source_workspace {
+    --zr-border: #dbe4ef;
+    --zr-navy: #173f70;
+
+    .o_zenrecon_intake_panels {
+        clear: both;
+    }
+
+    .o_zenrecon_panel {
+        border: 1px solid var(--zr-border);
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .o_zenrecon_panel_title {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--zr-border);
+        color: #1f2f46;
+        font-weight: 600;
+        background: #f8fafc;
+    }
+
+    .o_zenrecon_folder_tree {
+        padding: 14px 12px 18px;
+        line-height: 1.75;
+    }
+
+    .o_zenrecon_tree_root {
+        color: var(--zr-navy);
+        font-weight: 700;
+    }
+
+    .o_zenrecon_tree_level {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .o_zenrecon_tree_node {
+        padding-left: calc((var(--zr-level) + 1) * 18px);
+        color: #43546a;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+            border-radius: 5px;
+            background: #eef4fb;
+        }
+
+        .fa-folder {
+            color: #607d9f;
+        }
+
+        .fa-folder-o {
+            color: #8094aa;
+        }
+    }
+}

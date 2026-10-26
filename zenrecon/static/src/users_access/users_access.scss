@@ -1,0 +1,65 @@
+.o_bsr_users_layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    align-items: start;
+}
+.o_bsr_search_input {
+    border: 1px solid var(--bsr-border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: .74rem;
+    min-width: 180px;
+}
+.o_bsr_form_group {
+    margin-bottom: 12px;
+    label {
+        display: block;
+        font-size: .68rem;
+        font-weight: 650;
+        color: var(--bsr-muted);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+    }
+    input[type="text"] {
+        width: 100%;
+        border: 1px solid var(--bsr-border);
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: .78rem;
+    }
+}
+.o_bsr_chip_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.o_bsr_chip {
+    background: #eef1f3;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    &.is-scheme {
+        background: #e8f1f8;
+        color: var(--bsr-blue);
+    }
+}
+.o_bsr_chip_add {
+    background: transparent;
+    border: 1px dashed #bbb;
+    border-radius: 999px;
+    font-size: .68rem;
+    padding: 4px 10px;
+    color: var(--bsr-muted);
+}
+.o_bsr_user_edit_panel {
+    position: sticky;
+    top: 16px;
+}
+@media (max-width: 1000px) {
+    .o_bsr_users_layout {
+        grid-template-columns: 1fr;
+    }
+}

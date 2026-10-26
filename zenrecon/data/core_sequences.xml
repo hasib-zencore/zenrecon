@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_bsr_vss_import" model="ir.sequence">
+        <field name="name">VSS Import</field>
+        <field name="code">bsr.vss.import</field>
+        <field name="prefix">BSR/VSS/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_bsr_ipm_import" model="ir.sequence">
+        <field name="name">Mastercard IPM Import</field>
+        <field name="code">bsr.ipm.import</field>
+        <field name="prefix">BSR/IPM/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_mastercard_clearing_import" model="ir.sequence">
+        <field name="name">Mastercard Clearing Import</field>
+        <field name="code">mastercard.clearing.import</field>
+        <field name="prefix">MCI/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_npsb_settlement_configuration" model="ir.sequence">
+        <field name="name">NPSB Settlement Configuration</field>
+        <field name="code">npsb.settlement.configuration</field>
+        <field name="prefix">NPSB/CONFIG/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_npsb_settlement_voucher_run" model="ir.sequence">
+        <field name="name">NPSB Settlement Voucher Run</field>
+        <field name="code">npsb.settlement.voucher.run</field>
+        <field name="prefix">NPSB/VOUCHER/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_visa_detail_import" model="ir.sequence">
+        <field name="name">VISA Detail CMS/CBS Import</field>
+        <field name="code">visa.detail.import</field>
+        <field name="prefix">VISA/DETAIL/IMPORT/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_visa_detail_run" model="ir.sequence">
+        <field name="name">VISA Detail Reconciliation Run</field>
+        <field name="code">visa.detail.run</field>
+        <field name="prefix">VISA/RECON/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_visa_detail_item" model="ir.sequence">
+        <field name="name">VISA Detail Reconciliation Item</field>
+        <field name="code">visa.detail.item</field>
+        <field name="prefix">VDR/%(year)s/</field>
+        <field name="padding">7</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_visa_detail_match" model="ir.sequence">
+        <field name="name">VISA Detail Match ID</field>
+        <field name="code">visa.detail.match</field>
+        <field name="prefix">VISA/MATCH/%(year)s/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

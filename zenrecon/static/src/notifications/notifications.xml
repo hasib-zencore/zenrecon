@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="zenrecon.Notifications">
+        <div class="o_bsr_dashboard h-100 overflow-auto">
+            <main class="o_bsr_dashboard_shell">
+
+                <!-- Sidebar -->
+                <aside class="o_bsr_dashboard_sidebar">
+                    <nav class="o_bsr_dashboard_nav">
+                        <span class="o_bsr_dashboard_nav_label">MAIN</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openDashboard">
+                            <i class="fa fa-th-large"/><span>Dashboard</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openProcess">
+                            <i class="fa fa-upload"/><span>Upload VSS File</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">RECONCILIATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openReconciliation">
+                            <i class="fa fa-database"/><span>VSS Import History</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openTransactionReconciliation">
+                            <i class="fa fa-list-alt"/><span>Transaction Reconciliation</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ACCOUNTING</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openVoucherEntries">
+                            <i class="fa fa-file-excel-o"/><span>Voucher Register</span>
+                        </button>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-exchange"/><span>Batch / API Posting</span>
+                        </div>
+
+                        <span class="o_bsr_dashboard_nav_label">MONITORING</span>
+                        <div class="o_bsr_dashboard_nav_item is-placeholder" title="Coming soon">
+                            <i class="fa fa-clock-o"/><span>History</span>
+                        </div>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openNotifications">
+                            <i class="fa fa-bell"/><span>Notifications</span>
+                            <span class="o_bsr_dashboard_nav_badge">6</span>
+                        </button>
+
+                        <span class="o_bsr_dashboard_nav_label">ADMINISTRATION</span>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openUsersAccess">
+                            <i class="fa fa-users"/><span>Users &amp; Access</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openRolesPermissions">
+                            <i class="fa fa-table"/><span>Roles &amp; Permissions</span>
+                        </button>
+                        <button class="o_bsr_dashboard_nav_item" t-on-click="openMappings">
+                            <i class="fa fa-cog"/><span>VISA Voucher Rules</span>
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Workspace -->
+                <section class="o_bsr_dashboard_workspace">
+                    <div class="o_bsr_dashboard_content">
+
+                        <header class="o_bsr_dashboard_page_header">
+                            <div>
+                                <h1>Notifications</h1>
+                                <p>
+                                    <t t-esc="state.counts.unread"/> unread ·
+                                    <t t-esc="state.counts.critical"/> critical requiring action
+                                </p>
+                            </div>
+                            <button class="o_bsr_dashboard_btn_secondary">
+                                Mark All As Read
+                            </button>
+                        </header>
+
+                        <div class="o_bsr_notif_layout">
+                            <!-- Left: notification list -->
+                            <div class="o_bsr_notif_main">
+                                <!-- Filters -->
+                                <div class="o_bsr_notif_filters">
+                                    <button t-att-class="state.filter === 'all' ? 'active' : ''"
+                                            t-on-click="() => this.setFilter('all')">
+                                        All (<t t-esc="state.counts.all"/>)
+                                    </button>
+                                    <button t-att-class="state.filter === 'critical' ? 'active' : ''"
+                                            t-on-click="() => this.setFilter('critical')">
+                                        Critical (<t t-esc="state.counts.critical"/>)
+                                    </button>
+                                    <button t-att-class="state.filter === 'warning' ? 'active' : ''"
+                                            t-on-click="() => this.setFilter('warning')">
+                                        Warning (<t t-esc="state.counts.warning"/>)
+                                    </button>
+                                    <button t-att-class="state.filter === 'info' ? 'active' : ''"
+                                            t-on-click="() => this.setFilter('info')">
+                                        Info (<t t-esc="state.counts.info"/>)
+                                    </button>
+                                    <button t-att-class="state.filter === 'unread' ? 'active' : ''"
+                                            t-on-click="() => this.setFilter('unread')">
+                                        Unread (<t t-esc="state.counts.unread"/>)
+                                    </button>
+                                </div>
+
+                                <!-- List -->
+                                <div class="o_bsr_notif_list">
+                                    <t t-foreach="filteredNotifications" t-as="n" t-key="n.id">
+                                        <div t-att-class="'o_bsr_notif_card is-' + n.type + (n.unread ? ' is-unread' : '')">
+                                            <div class="o_bsr_notif_icon">
+                                                <i t-att-class="{
+                                                    'fa fa-exclamation-triangle': n.type === 'critical' || n.type === 'warning',
+                                                    'fa fa-check-circle': n.type === 'info'
+                                                }"/>
+                                            </div>
+                                            <div class="o_bsr_notif_body">
+                                                <div class="o_bsr_notif_title">
+                                                    <strong t-esc="n.title"/>
+                                                    <span t-att-class="'o_bsr_badge is-' + (n.type === 'critical' ? 'danger' : n.type === 'warning' ? 'warning' : 'success')"
+                                                          t-esc="n.type === 'critical' ? 'Critical' : n.type === 'warning' ? 'Warning' : 'Info'"/>
+                                                </div>
+                                                <p t-esc="n.message"/>
+                                                <small>
+                                                    <t t-esc="n.source"/> · <t t-esc="n.time"/>
+                                                </small>
+                                            </div>
+                                            <div class="o_bsr_notif_actions">
+                                                <t t-foreach="n.actions" t-as="act" t-key="act">
+                                                    <button class="btn btn-sm btn-secondary" t-esc="act"/>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Right: alert rules -->
+                            <aside class="o_bsr_notif_sidebar">
+                                <div class="o_bsr_dashboard_panel">
+                                    <div class="o_bsr_dashboard_panel_header">
+                                        <h2>Configured alert rules</h2>
+                                        <a href="#" class="o_bsr_dashboard_link">Manage →</a>
+                                    </div>
+                                    <div class="o_bsr_alert_rules">
+                                        <t t-foreach="state.alert_rules" t-as="rule" t-key="rule.name">
+                                            <div class="o_bsr_alert_rule">
+                                                <span t-esc="rule.name"/>
+                                                <label class="o_bsr_switch">
+                                                    <input type="checkbox" t-att-checked="rule.enabled"/>
+                                                    <span class="o_bsr_slider"/>
+                                                </label>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <p class="o_bsr_alert_note">
+                                        Delivered via in-app, email, and SMS to configured role recipients.
+                                    </p>
+                                </div>
+                            </aside>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+    </t>
+</templates>

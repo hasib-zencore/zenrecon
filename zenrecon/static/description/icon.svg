@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="ZenCore VSS Reconciliation">
+  <rect width="128" height="128" rx="28" fill="#123f68"/>
+  <path d="M20 46 64 20l44 26v10H20z" fill="#70c43b"/>
+  <path d="M31 60h10v35H31zm22 0h10v35H53zm22 0h10v35H75z" fill="#fff"/>
+  <path d="M20 99h88v9H20z" fill="#fff"/>
+  <circle cx="92" cy="91" r="17" fill="#70c43b"/>
+  <path d="m84 91 5 5 11-12" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+</svg>

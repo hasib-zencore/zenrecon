@@ -1,0 +1,656 @@
+.o_bsr_configuration_form {
+    --bsr-primary: #0d568b;
+    --bsr-primary-soft: #eaf5fb;
+    --bsr-accent: #70c43b;
+    --bsr-border: #d8e4eb;
+    --bsr-muted: #657887;
+    --bsr-surface: var(--o-view-background-color, #fff);
+
+    .o_form_sheet_bg {
+        background: #f5f7f9;
+    }
+
+    .o_form_sheet {
+        max-width: none;
+    }
+
+    .oe_title {
+        margin-bottom: 14px;
+
+        h1 {
+            color: #173a52;
+            font-size: 1.75rem;
+            font-weight: 650;
+            letter-spacing: -0.025em;
+        }
+    }
+
+    .o_bsr_notice {
+        align-items: flex-start;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding: 10px 13px;
+
+        i {
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+    }
+
+    .o_bsr_notice_info {
+        background: #edf7fb;
+        border-color: #c7e5f1;
+        color: #174f69;
+    }
+
+    .o_bsr_notice_warning {
+        background: #fff8e7;
+        border-color: #f2d99c;
+        color: #725619;
+    }
+
+    .o_bsr_notice_success {
+        background: #edf8f2;
+        border-color: #bfe3cf;
+        color: #1d6540;
+    }
+
+    .o_bsr_notice_danger {
+        background: #fff0f1;
+        border-color: #efc5ca;
+        color: #8a2c36;
+    }
+
+    .o_bsr_step_grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 16px;
+    }
+
+    .o_bsr_step_card {
+        background: var(--bsr-surface);
+        border: 1px solid var(--bsr-border);
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(18, 63, 104, 0.045);
+        min-width: 0;
+        padding: 15px 17px;
+    }
+
+    .o_bsr_step_card_wide {
+        margin-top: 14px;
+    }
+
+    .o_bsr_step_header {
+        align-items: flex-start;
+        border-bottom: 1px solid #edf1f3;
+        display: flex;
+        gap: 11px;
+        margin-bottom: 13px;
+        padding-bottom: 11px;
+
+        h3 {
+            color: #173a52;
+            font-size: 0.96rem;
+            font-weight: 700;
+            margin: 0 0 2px;
+        }
+
+        p {
+            color: var(--bsr-muted);
+            font-size: 0.78rem;
+            margin: 0;
+        }
+    }
+
+    .o_bsr_step_number {
+        align-items: center;
+        background: var(--bsr-primary);
+        border-radius: 50%;
+        color: #fff;
+        display: inline-flex;
+        flex: 0 0 28px;
+        font-size: 0.78rem;
+        font-weight: 750;
+        height: 28px;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: var(--bsr-primary);
+        border-color: var(--bsr-primary);
+        box-shadow: 0 2px 5px rgba(13, 86, 139, .16);
+
+        &:hover,
+        &:focus {
+            background: #0a4775;
+            border-color: #0a4775;
+        }
+    }
+
+    .btn-secondary,
+    .btn-outline-secondary {
+        background: #fff;
+        border-color: var(--bsr-primary);
+        color: var(--bsr-primary);
+
+        &:hover,
+        &:focus {
+            background: var(--bsr-primary);
+            border-color: var(--bsr-primary);
+            color: #fff;
+        }
+    }
+
+    .o_form_statusbar {
+        background: #f6fafc;
+        border-bottom: 1px solid var(--bsr-border);
+    }
+
+    .o_bsr_step_fields,
+    .o_bsr_filter_grid {
+        margin-bottom: 0;
+    }
+
+    .o_bsr_filter_layout {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+    }
+
+    .o_bsr_amount_selector {
+        min-width: 0;
+    }
+
+    .o_bsr_amount_intro {
+        align-items: baseline;
+        display: flex;
+        gap: 9px;
+        margin-bottom: 8px;
+
+        strong {
+            color: #173a52;
+        }
+
+        span {
+            color: var(--bsr-muted);
+            font-size: 0.76rem;
+        }
+    }
+
+    .o_bsr_amount_group {
+        background: #f8fafb;
+        border: 1px solid var(--bsr-border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        padding: 9px 12px 5px;
+
+        h4 {
+            color: var(--bsr-primary);
+            font-size: 0.78rem;
+            font-weight: 750;
+            margin: 0 0 5px;
+        }
+
+        .o_boolean_toggle input:checked + span,
+        .o_boolean_toggle .o_switch input:checked + span {
+            background-color: var(--bsr-accent);
+            border-color: var(--bsr-accent);
+        }
+    }
+
+    .o_bsr_match_summary {
+        align-items: center;
+        background: var(--bsr-primary-soft);
+        border-radius: 7px;
+        color: #315566;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 0.78rem;
+        gap: 8px 20px;
+        margin-bottom: 11px;
+        padding: 9px 12px;
+
+        strong {
+            color: #153f54;
+        }
+    }
+
+    .o_bsr_totals {
+        display: grid;
+        gap: 9px;
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
+        margin-bottom: 13px;
+    }
+
+    .o_bsr_total_item {
+        background: #f8fafb;
+        border: 1px solid var(--bsr-border);
+        border-radius: 8px;
+        padding: 9px 11px;
+
+        > span {
+            color: var(--bsr-muted);
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 650;
+            letter-spacing: 0.04em;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+
+        strong {
+            color: #173a52;
+            font-size: 1rem;
+        }
+    }
+
+    .o_bsr_total_status {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+
+        > span {
+            margin: 0;
+        }
+    }
+
+    .o_bsr_rule_list {
+        border: 1px solid var(--bsr-border);
+        border-radius: 8px;
+        overflow: auto;
+
+        .o_list_table {
+            margin-bottom: 0;
+
+            thead th {
+                background: #eaf1f5;
+                color: #173a52;
+                font-size: 0.76rem;
+                font-weight: 650;
+                vertical-align: middle;
+            }
+
+            tbody td {
+                border-color: #e7edf0;
+                vertical-align: middle;
+            }
+
+            tfoot td {
+                background: #f1f8f3;
+                color: #1b4d3e;
+                font-weight: 700;
+            }
+        }
+    }
+
+    .o_bsr_combined_rule_list {
+        .o_field_x2many_list_row_add,
+        .o_list_button_add,
+        .o_list_record_remove {
+            display: none !important;
+        }
+    }
+
+    .o_bsr_amount_summary {
+        border: 1px solid var(--bsr-border);
+        border-radius: 8px;
+        margin-bottom: 12px;
+        overflow-x: auto;
+
+        .o_bsr_amount_summary_title {
+            background: var(--bsr-primary-soft);
+            color: #173a52;
+            font-size: .78rem;
+            font-weight: 700;
+            padding: 9px 12px;
+        }
+
+        .o_bsr_amount_summary_table {
+            margin: 0;
+            min-width: 720px;
+
+            thead th {
+                background: #eaf1f5;
+                color: #173a52;
+                font-size: .73rem;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+            tbody td {
+                border-color: #e7edf0;
+                color: #315566;
+                font-size: .78rem;
+                vertical-align: middle;
+            }
+
+            tbody tr:hover {
+                background: #f3f8fb;
+            }
+        }
+    }
+
+    .o_bsr_mapping_notebook {
+        .nav-tabs {
+            border-bottom-color: var(--bsr-border);
+            margin-bottom: 10px;
+
+            .nav-link {
+                color: var(--bsr-muted);
+                font-size: .78rem;
+                font-weight: 650;
+
+                &.active {
+                    border-color: var(--bsr-border) var(--bsr-border) #fff;
+                    color: var(--bsr-primary);
+                }
+            }
+        }
+
+        .tab-content {
+            min-width: 0;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .o_bsr_step_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .o_bsr_filter_layout {
+            grid-template-columns: 1fr;
+        }
+
+        .o_bsr_totals {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
+// Keep the activity feed useful without taking space from the wide rule table.
+// The rule-list marker scopes this to Accounting Setup; other Odoo forms are unchanged.
+.o_form_renderer:has(.o_bsr_rule_list) > .o-mail-Form-chatter.o-aside {
+    flex: 0 0 clamp(320px, 22vw, 390px);
+    width: clamp(320px, 22vw, 390px);
+    min-width: 0;
+}
+
+// Run and final-report views share the same visual language as configuration.
+.o_bsr_run_form,
+.o_bsr_accounting_report_form {
+    .o_form_sheet_bg {
+        background: #f5f8fa;
+    }
+
+    .o_form_sheet {
+        max-width: 1320px;
+    }
+
+    .o_group {
+        background: #fff;
+        border: 1px solid var(--bsr-border);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(18, 63, 104, .04);
+        margin-bottom: 16px;
+        padding: 14px 16px;
+    }
+
+    .o_horizontal_separator,
+    .o_form_label {
+        color: #315566;
+        font-weight: 650;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+
+    .o_list_table {
+        thead th {
+            background: var(--bsr-primary);
+            border-color: var(--bsr-primary);
+            color: #fff;
+            font-size: .74rem;
+            font-weight: 700;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #edf7fb !important;
+        }
+
+        tbody td {
+            border-color: #e4edf2;
+            vertical-align: middle;
+        }
+    }
+}
+
+.o_bsr_accounting_report_list {
+    .o_list_table {
+        thead th {
+            background: var(--bsr-primary);
+            border-color: var(--bsr-primary);
+            color: #fff;
+            font-size: .74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        tbody tr:hover {
+            background: #edf7fb !important;
+        }
+    }
+}
+
+.o_bsr_accounting_run_list {
+    background: #f5f7f9;
+    padding: 16px 20px 24px;
+
+    .o_list_table {
+        background: #fff;
+        border: 1px solid #dce3e8;
+        border-collapse: separate;
+        border-radius: 9px;
+        border-spacing: 0;
+        box-shadow: 0 2px 6px rgba(18, 45, 65, .045);
+        margin: 0;
+        min-width: 1180px;
+        overflow: hidden;
+
+        thead th {
+            background: #f3f5f7;
+            border-bottom: 1px solid #d7dfe5;
+            border-top: 0;
+            color: #53606b !important;
+            font-size: .68rem;
+            font-weight: 700;
+            height: 42px;
+            letter-spacing: .035em;
+            padding: 0 12px;
+            text-transform: uppercase;
+            vertical-align: middle;
+            white-space: nowrap;
+
+            .o_column_title,
+            .o_list_number_th {
+                color: #53606b !important;
+                opacity: 1;
+            }
+        }
+
+        tbody td {
+            border-bottom: 1px solid #e6ebef;
+            color: #2d3740;
+            font-size: .78rem;
+            height: 43px;
+            padding: 8px 12px;
+            vertical-align: middle;
+
+            &.o_list_number {
+                color: #22384a;
+                font-variant-numeric: tabular-nums;
+                font-weight: 600;
+            }
+
+            a {
+                color: #0b5e98;
+                font-weight: 600;
+                text-decoration: none;
+            }
+        }
+
+        tbody tr:last-child td { border-bottom: 0; }
+
+        tbody tr:hover {
+            background: #f2f8fc !important;
+        }
+
+        .o_field_badge {
+            border-radius: 999px;
+            font-size: .68rem;
+            font-weight: 700;
+            min-width: 74px;
+            padding: 4px 10px;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 991px) {
+        padding: 10px;
+    }
+}
+
+.o_bsr_configuration_list {
+    .o_list_table {
+        border-collapse: separate;
+        border-spacing: 0;
+
+        thead th {
+            background: #f3f5f7;
+            border-bottom: 1px solid #d7dfe5;
+            color: #53606b !important;
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .035em;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+
+        tbody td {
+            border-color: #e6ebef;
+            color: #2d3740;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover { background: #f2f8fc !important; }
+    }
+}
+
+// Unified list language across VSS Imports, Voucher Runs, Configuration
+// Templates, and Final Voucher Reports.
+.o_bsr_vss_import_list,
+.o_bsr_vss_report_list,
+.o_bsr_vss_exception_list,
+.o_bsr_accounting_run_list,
+.o_bsr_configuration_list,
+.o_bsr_accounting_report_list {
+    background: #eef5f8;
+    padding: 12px 20px 24px;
+
+    .o_list_table {
+        background: #fff;
+        border: 1px solid #b9d2df;
+        border-collapse: separate;
+        border-radius: 9px;
+        border-spacing: 0;
+        box-shadow: 0 3px 10px rgba(15, 63, 92, .13);
+        margin: 0;
+        overflow: hidden;
+
+        thead th {
+            background: #123f5b !important;
+            border-bottom: 1px solid #0a3048 !important;
+            border-top: 0;
+            color: #fff !important;
+            font-size: .68rem;
+            font-weight: 700;
+            height: 42px;
+            letter-spacing: .035em;
+            padding: 0 12px;
+            text-transform: uppercase;
+            vertical-align: middle;
+            white-space: nowrap;
+
+            .o_column_title,
+            .o_list_number_th,
+            button,
+            i { color: #fff !important; opacity: 1; }
+        }
+
+        tbody td {
+            border-bottom: 1px solid #e1eaf0;
+            color: #283943 !important;
+            font-size: .78rem;
+            height: 43px;
+            padding: 8px 12px;
+            vertical-align: middle;
+
+            &.o_list_number {
+                color: #124f72 !important;
+                font-variant-numeric: tabular-nums;
+                font-weight: 600;
+            }
+
+            a { color: #075f95 !important; font-weight: 650; text-decoration: none; }
+        }
+
+        tbody tr:nth-child(even) > td { background: #edf5f9; }
+        tbody tr:last-child td { border-bottom: 0; }
+        tbody tr:hover > td { background: #dceef6 !important; }
+        tbody tr.o_data_row_selected > td { background: #cfe8f3 !important; }
+
+        .o_field_badge {
+            border-radius: 999px;
+            font-size: .68rem;
+            font-weight: 700;
+            min-width: 72px;
+            padding: 4px 10px;
+            text-align: center;
+
+            .badge {
+                border: 1px solid transparent;
+
+                &.text-bg-success {
+                    background: #dff1d3 !important;
+                    border-color: #bdddac;
+                    color: #3e8927 !important;
+                }
+
+                &.text-bg-danger {
+                    background: #fde1de !important;
+                    border-color: #f5bcb6;
+                    color: #b9342d !important;
+                }
+
+                &.text-bg-warning {
+                    background: #ffedca !important;
+                    border-color: #edcf91;
+                    color: #946005 !important;
+                }
+
+                &.text-bg-300 {
+                    background: #e4e9ed !important;
+                    border-color: #ccd5db;
+                    color: #4d5962 !important;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 700px) { padding: 8px; }
+}

@@ -1,0 +1,320 @@
+/* ZenCore visual language for the source-file and VSS-report workspace. */
+:root {
+    --zencore-blue: #123f68;
+    --zencore-blue-strong: #0d568b;
+    --zencore-green: #70c43b;
+    --zencore-ink: #183247;
+    --zencore-muted: #6b7d8b;
+    --zencore-line: #dbe6ed;
+    --zencore-surface: #ffffff;
+    --zencore-soft: #f3f8fb;
+}
+
+.o_bsr_vss_import_form,
+.o_bsr_vss_exception_form {
+    background: #f5f8fa;
+
+    .o_form_sheet_bg {
+        background: #f5f8fa;
+    }
+
+    .o_form_sheet {
+        max-width: 1320px;
+    }
+
+    .oe_title {
+        margin-bottom: 20px;
+
+        h1 {
+            color: var(--zencore-ink);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -.03em;
+        }
+    }
+
+    .oe_button_box {
+        border-bottom: 1px solid var(--zencore-line);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+
+        .oe_stat_button {
+            background: var(--zencore-surface);
+            border: 1px solid var(--zencore-line);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(18, 63, 104, .05);
+            color: var(--zencore-blue);
+            min-width: 116px;
+            overflow: hidden;
+            transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+
+            &:hover {
+                border-color: #9ec4d8;
+                box-shadow: 0 5px 14px rgba(18, 63, 104, .10);
+                transform: translateY(-1px);
+            }
+
+            .o_stat_value {
+                color: var(--zencore-ink);
+                font-weight: 700;
+            }
+        }
+    }
+
+    .o_group {
+        background: var(--zencore-surface);
+        border: 1px solid var(--zencore-line);
+        border-radius: 12px;
+        box-shadow: 0 2px 7px rgba(18, 63, 104, .035);
+        margin-bottom: 16px;
+        padding: 16px 18px;
+
+        .o_form_label {
+            color: var(--zencore-muted);
+            font-weight: 600;
+        }
+    }
+
+    .o_horizontal_separator,
+    .o_form_sheet_bg .o_form_label.o_form_label_empty {
+        color: var(--zencore-blue);
+        font-weight: 700;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border-width: 1px;
+        box-shadow: none;
+    }
+
+    .btn-primary {
+        background: var(--zencore-blue-strong);
+        border-color: var(--zencore-blue-strong);
+        color: #fff;
+
+        &:hover,
+        &:focus {
+            background: #0a4775;
+            border-color: #0a4775;
+            color: #fff;
+        }
+    }
+
+    .btn-secondary,
+    .btn-outline-secondary {
+        background: #fff;
+        border-color: var(--zencore-blue-strong);
+        color: var(--zencore-blue-strong);
+
+        &:hover,
+        &:focus {
+            background: var(--zencore-blue-strong);
+            border-color: var(--zencore-blue-strong);
+            color: #fff;
+        }
+    }
+
+    .o_field_text textarea,
+    .o_field_char input,
+    .o_field_many2one input {
+        border-color: var(--zencore-line);
+        border-radius: 7px;
+    }
+}
+
+.o_bsr_vss_import_list,
+.o_bsr_vss_report_list,
+.o_bsr_vss_exception_list {
+    .o_list_table {
+        border-collapse: separate;
+        border-spacing: 0;
+
+        thead th {
+            background: var(--zencore-blue);
+            border-color: var(--zencore-blue);
+            color: #fff;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background-color .12s ease;
+
+            &:hover {
+                background: #edf7fb !important;
+            }
+        }
+
+        tbody td {
+            border-color: #e4edf2;
+            color: var(--zencore-ink);
+            vertical-align: middle;
+        }
+    }
+}
+
+.o_bsr_vss_wizard_form {
+    .modal-header {
+        border-bottom: 0;
+        padding-bottom: 0;
+
+        .modal-title {
+            color: var(--zencore-ink);
+            font-weight: 700;
+        }
+    }
+
+    .modal-content,
+    .o_form_sheet {
+        border: 1px solid var(--zencore-line);
+        border-radius: 14px;
+        box-shadow: 0 12px 36px rgba(18, 63, 104, .14);
+    }
+
+    .btn-primary {
+        background: var(--zencore-blue-strong);
+        border-color: var(--zencore-blue-strong);
+    }
+
+    .btn-secondary,
+    .btn-outline-secondary {
+        background: #fff;
+        border-color: var(--zencore-blue-strong);
+        color: var(--zencore-blue-strong);
+
+        &:hover,
+        &:focus {
+            background: var(--zencore-blue-strong);
+            border-color: var(--zencore-blue-strong);
+            color: #fff;
+        }
+    }
+}
+
+.o_bsr_vss_import_form .o_statusbar_status,
+.o_bsr_vss_exception_form .o_statusbar_status {
+    .o_arrow_button.btn-primary {
+        background: var(--zencore-blue-strong);
+        border-color: var(--zencore-blue-strong);
+    }
+}
+
+.o_npsb_configuration_form {
+    background: #f5f8fa;
+
+    .o_form_sheet_bg { background: #f5f8fa; }
+    .o_form_sheet { max-width: 1440px; }
+
+    .oe_title h1 {
+        color: var(--zencore-ink);
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .o_npsb_step_card {
+        background: #fff;
+        border: 1px solid var(--zencore-line);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(18, 63, 104, .04);
+        margin: 14px 0;
+        padding: 16px 18px;
+    }
+
+    .o_npsb_step_header {
+        align-items: flex-start;
+        border-bottom: 1px solid #e6eef3;
+        display: flex;
+        gap: 12px;
+        margin-bottom: 14px;
+        padding-bottom: 11px;
+
+        h3 { color: var(--zencore-ink); font-size: 1rem; font-weight: 700; margin: 1px 0 2px; }
+        p { color: var(--zencore-muted); margin: 0; }
+    }
+
+    .o_npsb_step_number {
+        align-items: center;
+        background: var(--zencore-blue-strong);
+        border-radius: 50%;
+        color: #fff;
+        display: inline-flex;
+        flex: 0 0 29px;
+        font-weight: 700;
+        height: 29px;
+        justify-content: center;
+    }
+
+    .o_npsb_filter_layout {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: minmax(0, 1.4fr) minmax(300px, .6fr);
+    }
+
+    .o_npsb_amount_selector {
+        background: var(--zencore-soft);
+        border: 1px solid var(--zencore-line);
+        border-radius: 10px;
+        padding: 12px 14px;
+    }
+
+    .o_npsb_amount_intro {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 8px;
+
+        strong { color: var(--zencore-blue); }
+        span { color: var(--zencore-muted); font-size: .85rem; }
+    }
+
+    .o_npsb_notice {
+        align-items: center;
+        border: 1px solid;
+        border-radius: 9px;
+        display: flex;
+        gap: 9px;
+        margin: 10px 0;
+        padding: 10px 13px;
+    }
+    .o_npsb_notice_info { background: #eaf6fb; border-color: #b9ddeb; color: #23566e; }
+    .o_npsb_notice_warning { background: #fff8e7; border-color: #efd99a; color: #765a0b; }
+    .o_npsb_notice_success { background: #edf8e8; border-color: #c9e5bb; color: #2e6a21; }
+
+    .o_npsb_match_summary,
+    .o_npsb_totals {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .o_npsb_match_summary span,
+    .o_npsb_totals > div {
+        background: var(--zencore-soft);
+        border: 1px solid var(--zencore-line);
+        border-radius: 8px;
+        min-width: 145px;
+        padding: 8px 12px;
+    }
+
+    .o_npsb_totals > div {
+        display: flex;
+        flex-direction: column;
+        span { color: var(--zencore-muted); font-size: .75rem; text-transform: uppercase; }
+        strong { color: var(--zencore-ink); }
+    }
+}
+
+.o_npsb_configuration_list .o_list_table {
+    thead th { background: var(--zencore-blue); border-color: var(--zencore-blue); color: #fff; }
+    tbody tr:hover { background: #edf7fb !important; }
+}
+
+@media (max-width: 992px) {
+    .o_npsb_configuration_form .o_npsb_filter_layout { grid-template-columns: 1fr; }
+}
