@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_npsb_settlement_configuration_search" model="ir.ui.view">
+        <field name="name">npsb.settlement.configuration.search</field>
+        <field name="model">npsb.settlement.configuration</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_report_id"/>
+                <field name="state"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_matched" string="Needs GL" domain="[('state', '=', 'matched')]"/>
+                <filter name="filter_ready" string="Ready" domain="[('state', '=', 'ready')]"/>
+                <group>
+                    <filter name="group_report" string="Settlement Report" context="{'group_by': 'source_report_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_npsb_settlement_configuration_list" model="ir.ui.view">
+        <field name="name">npsb.settlement.configuration.list</field>
+        <field name="model">npsb.settlement.configuration</field>
+        <field name="arch" type="xml">
+            <list class="o_npsb_configuration_list">
+                <field name="name"/>
+                <field name="source_report_id"/>
+                <field name="source_row_count"/>
+                <field name="rule_count"/>
+                <field name="incomplete_count"/>
+                <field name="preview_debit_total" sum="Total Debit"/>
+                <field name="preview_credit_total" sum="Total Credit"/>
+                <field name="preview_difference" sum="Difference"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'ready'"
+                       decoration-warning="state == 'matched'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_npsb_settlement_configuration_form" model="ir.ui.view">
+        <field name="name">npsb.settlement.configuration.form</field>
+        <field name="model">npsb.settlement.configuration</field>
+        <field name="arch" type="xml">
+            <form string="NPSB Settlement Configuration" class="o_npsb_configuration_form">
+                <header>
+                    <button name="action_match_source" type="object"
+                            string="Match Summary Data" icon="fa-search"
+                            class="btn-primary" invisible="state == 'ready'"/>
+                    <button name="action_validate" type="object"
+                            string="Confirm GL Mapping" icon="fa-check"
+                            class="btn-primary" invisible="state != 'matched'"/>
+                    <button name="action_reset_draft" type="object"
+                            string="Edit / Re-match" icon="fa-pencil"
+                            invisible="state != 'ready'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,matched,ready"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="READY" bg_color="text-bg-success"
+                            invisible="state != 'ready'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <div class="o_npsb_notice o_npsb_notice_info" invisible="state != 'draft'">
+                        <i class="fa fa-info-circle" title="Information" aria-hidden="true"/>
+                        <span>Select a processed settlement report, narrow the Summary rows if needed, and choose the monetary columns to configure.</span>
+                    </div>
+                    <div class="o_npsb_notice o_npsb_notice_warning" invisible="not validation_message or state == 'ready'">
+                        <i class="fa fa-pencil" title="Action required" aria-hidden="true"/>
+                        <field name="validation_message" nolabel="1"/>
+                    </div>
+                    <div class="o_npsb_notice o_npsb_notice_success" invisible="state != 'ready'">
+                        <i class="fa fa-check-circle" title="Complete" aria-hidden="true"/>
+                        <span>Configuration is complete and ready for settlement output.</span>
+                    </div>
+
+                    <section class="o_npsb_step_card">
+                        <div class="o_npsb_step_header">
+                            <span class="o_npsb_step_number">1</span>
+                            <div>
+                                <h3>Settlement source</h3>
+                                <p>Choose the processed NPSB report that supplies the Summary data.</p>
+                            </div>
+                        </div>
+                        <group col="2" class="o_npsb_step_fields">
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="source_report_id" readonly="state != 'draft'"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                        </group>
+                    </section>
+
+                    <section class="o_npsb_step_card">
+                        <div class="o_npsb_step_header">
+                            <span class="o_npsb_step_number">2</span>
+                            <div>
+                                <h3>Dynamic Summary filters</h3>
+                                <p>No selection means All values. Source dates limit this setup preview only; daily voucher dates select the current report. Business filters and accounting mappings are reused every day.</p>
+                            </div>
+                        </div>
+                        <div class="o_npsb_filter_layout">
+                            <group col="2" class="o_npsb_filter_grid">
+                                <field name="transaction_date_option_ids" string="Preview Transaction Date" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       domain="[('report_id', '=', source_report_id), ('field_name', '=', 'transaction_date')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="settlement_date_option_ids" string="Preview Settlement Date" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       domain="[('report_id', '=', source_report_id), ('field_name', '=', 'settlement_date')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="business_mode_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       domain="[('report_id', '=', source_report_id), ('field_name', '=', 'business_mode')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="delivery_channel_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       domain="[('report_id', '=', source_report_id), ('field_name', '=', 'delivery_channel')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="transaction_type_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       domain="[('report_id', '=', source_report_id), ('field_name', '=', 'transaction_type')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <div class="o_npsb_amount_selector">
+                                <div class="o_npsb_amount_intro">
+                                    <strong>Amount columns</strong>
+                                    <span>Only enabled monetary columns produce accounting rules.</span>
+                                </div>
+                                <group col="2">
+                                    <field name="amount_trans_amount" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    <field name="amount_fees_irf" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    <field name="amount_platform_fee" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    <field name="amount_net_amount" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                </group>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="o_npsb_step_card o_npsb_rules_step">
+                        <div class="o_npsb_step_header">
+                            <span class="o_npsb_step_number">3</span>
+                            <div>
+                                <h3>Accounting rules and GL mapping</h3>
+                                <p>Assign DR/CR, GL details, and side-specific remarks to each matched Summary amount.</p>
+                            </div>
+                        </div>
+                        <div class="o_npsb_match_summary" invisible="not line_ids">
+                            <span><strong><field name="source_row_count" class="oe_inline"/></strong> contributions</span>
+                            <span><strong><field name="rule_count" class="oe_inline"/></strong> rules</span>
+                            <span><strong><field name="incomplete_count" class="oe_inline"/></strong> need mapping</span>
+                        </div>
+                        <div class="o_npsb_totals" invisible="not line_ids">
+                            <div><span>Debit total</span><strong><field name="preview_debit_total" nolabel="1"/></strong></div>
+                            <div><span>Credit total</span><strong><field name="preview_credit_total" nolabel="1"/></strong></div>
+                            <div><span>Difference</span><strong><field name="preview_difference" nolabel="1"/></strong></div>
+                            <div><span>Balanced</span><field name="is_preview_balanced" nolabel="1" widget="boolean_toggle" readonly="1"/></div>
+                        </div>
+                        <field name="line_ids" nolabel="1" readonly="state == 'ready'">
+                            <list editable="bottom" create="false" delete="false" multi_edit="1"
+                                  default_order="sequence, id"
+                                  decoration-success="configuration_status == 'configured'"
+                                  decoration-warning="configuration_status == 'incomplete'"
+                                  decoration-muted="configuration_status == 'excluded'">
+                                <field name="configuration_state" column_invisible="True"/>
+                                <field name="sequence" column_invisible="True"/>
+                                <field name="include_in_voucher" string="Use"/>
+                                <field name="business_mode" readonly="1"/>
+                                <field name="delivery_channel" readonly="1"/>
+                                <field name="transaction_type" readonly="1"/>
+                                <field name="amount_source" readonly="1"/>
+                                <field name="matched_amount" readonly="1"/>
+                                <field name="posting_indicator" string="DR/CR"/>
+                                <field name="debit_amount" readonly="1"/>
+                                <field name="credit_amount" readonly="1"/>
+                                <field name="gl_number"/>
+                                <field name="gl_name"/>
+                                <field name="debit_remarks" optional="show"/>
+                                <field name="credit_remarks" optional="show"/>
+                                <field name="configuration_status" string="Status" readonly="1" widget="badge"
+                                       decoration-success="configuration_status == 'configured'"
+                                       decoration-warning="configuration_status == 'incomplete'"
+                                       decoration-muted="configuration_status == 'excluded'"/>
+                                <field name="source_row_count" optional="hide" readonly="1"/>
+                            </list>
+                        </field>
+                    </section>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_npsb_settlement_configuration" model="ir.actions.act_window">
+        <field name="name">Settlement Voucher Rules</field>
+        <field name="res_model">npsb.settlement.configuration</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_npsb_settlement_configuration_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create an NPSB settlement configuration.</p>
+            <p>Select a processed report, filter its Summary data, and complete the DR/CR and GL mapping.</p>
+        </field>
+    </record>
+</odoo>

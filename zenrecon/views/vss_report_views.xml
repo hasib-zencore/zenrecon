@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         VSS-110 — one consolidated table per imported TXT file
+         ============================================================ -->
+    <record id="view_bsr_vss_110_consolidated_search" model="ir.ui.view">
+        <field name="name">bsr.vss.110.consolidated.search</field>
+        <field name="model">bsr.vss.110.line</field>
+        <field name="arch" type="xml">
+            <search string="Search VSS-110">
+                <field name="import_id"/>
+                <field name="processing_date"/>
+                <field name="report_date"/>
+                <field name="reporting_for_display"/>
+                <field name="rollup_to_display"/>
+                <field name="funds_xfer_entity_display"/>
+                <field name="settlement_currency"/>
+                <field name="particulars"/>
+                <field name="entity"/>
+                <field name="record_type"/>
+                <group>
+                    <filter string="Production Date" name="group_processing_date" context="{'group_by': 'processing_date'}"/>
+                    <filter string="Reporting For" name="group_reporting_for" context="{'group_by': 'reporting_for_display'}"/>
+                    <filter string="Settlement Currency" name="group_settlement_currency" context="{'group_by': 'settlement_currency'}"/>
+                    <filter string="Particulars" name="group_particulars" context="{'group_by': 'particulars'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_110_consolidated_list" model="ir.ui.view">
+        <field name="name">bsr.vss.110.consolidated.list</field>
+        <field name="model">bsr.vss.110.line</field>
+        <field name="arch" type="xml">
+            <list string="VSS-110 Settlement Summary" class="o_bsr_vss_report_list" create="false" edit="false" delete="false">
+                <field name="source_page" string="Page"/>
+                <field name="sequence" string="SL#"/>
+                <field name="processing_date" string="Production Date"/>
+                <field name="report_date"/>
+                <field name="report_code" string="Report ID"/>
+                <field name="report_name"/>
+                <field name="reporting_for_display" string="Reporting For"/>
+                <field name="rollup_to_display" string="Rollup To"/>
+                <field name="funds_xfer_entity_display" string="Funds Xfer Entity"/>
+                <field name="settlement_currency"/>
+                <field name="particulars"/>
+                <field name="entity"/>
+                <field name="count_display" string="Count"/>
+                <field name="credit_amount"/>
+                <field name="debit_amount"/>
+                <field name="total_amount"/>
+                <field name="direction" string="CR/DB"/>
+                <field name="record_type"/>
+                <field name="service_name" optional="hide"/>
+                <field name="source_report_sequence" optional="hide"/>
+                <field name="source_line_no" optional="hide"/>
+                <field name="import_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_110_consolidated" model="ir.actions.act_window">
+        <field name="name">VSS-110</field>
+        <field name="res_model">bsr.vss.110.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bsr_vss_110_consolidated_list"/>
+        <field name="search_view_id" ref="view_bsr_vss_110_consolidated_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <!-- ============================================================
+         VSS-120
+         ============================================================ -->
+    <record id="view_bsr_vss_120_consolidated_search" model="ir.ui.view">
+        <field name="name">bsr.vss.120.consolidated.search</field>
+        <field name="model">bsr.vss.120.line</field>
+        <field name="arch" type="xml">
+            <search string="Search VSS-120">
+                <field name="import_id"/>
+                <field name="processing_date"/>
+                <field name="reporting_for_display"/>
+                <field name="settlement_currency"/>
+                <field name="clearing_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="record_type"/>
+                <group>
+                    <filter string="Production Date" name="group_processing_date_120" context="{'group_by': 'processing_date'}"/>
+                    <filter string="Reporting For" name="group_reporting_for_120" context="{'group_by': 'reporting_for_display'}"/>
+                    <filter string="Clearing Currency" name="group_clearing_currency_120" context="{'group_by': 'clearing_currency'}"/>
+                    <filter string="Business Mode" name="group_business_mode_120" context="{'group_by': 'business_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_120_consolidated_list" model="ir.ui.view">
+        <field name="name">bsr.vss.120.consolidated.list</field>
+        <field name="model">bsr.vss.120.line</field>
+        <field name="arch" type="xml">
+            <list string="VSS-120 Interchange Value" class="o_bsr_vss_report_list" create="false" edit="false" delete="false">
+                <field name="source_page" string="Page"/>
+                <field name="sequence" string="SL#"/>
+                <field name="processing_date" string="Production Date"/>
+                <field name="report_date"/>
+                <field name="report_code" string="Report ID"/>
+                <field name="report_name"/>
+                <field name="reporting_for_display" string="Reporting For"/>
+                <field name="rollup_to_display" string="Rollup To"/>
+                <field name="funds_xfer_entity_display" string="Funds Xfer Entity"/>
+                <field name="settlement_currency"/>
+                <field name="clearing_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="disposition"/>
+                <field name="currency_table_date"/>
+                <field name="count"/>
+                <field name="clearing_amount"/>
+                <field name="clearing_direction" string="Clearing CR/DB"/>
+                <field name="interchange_credit"/>
+                <field name="interchange_debit"/>
+                <field name="record_type"/>
+                <field name="service_name" optional="hide"/>
+                <field name="source_report_sequence" optional="hide"/>
+                <field name="source_line_no" optional="hide"/>
+                <field name="import_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_120_consolidated" model="ir.actions.act_window">
+        <field name="name">VSS-120</field>
+        <field name="res_model">bsr.vss.120.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bsr_vss_120_consolidated_list"/>
+        <field name="search_view_id" ref="view_bsr_vss_120_consolidated_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <!-- ============================================================
+         VSS-130
+         ============================================================ -->
+    <record id="view_bsr_vss_130_consolidated_search" model="ir.ui.view">
+        <field name="name">bsr.vss.130.consolidated.search</field>
+        <field name="model">bsr.vss.130.line</field>
+        <field name="arch" type="xml">
+            <search string="Search VSS-130">
+                <field name="import_id"/>
+                <field name="processing_date"/>
+                <field name="reporting_for_display"/>
+                <field name="settlement_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="program_network"/>
+                <field name="region_country"/>
+                <field name="fee_category"/>
+                <field name="description"/>
+                <group>
+                    <filter string="Production Date" name="group_processing_date_130" context="{'group_by': 'processing_date'}"/>
+                    <filter string="Reporting For" name="group_reporting_for_130" context="{'group_by': 'reporting_for_display'}"/>
+                    <filter string="Business Mode" name="group_business_mode_130" context="{'group_by': 'business_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_130_consolidated_list" model="ir.ui.view">
+        <field name="name">bsr.vss.130.consolidated.list</field>
+        <field name="model">bsr.vss.130.line</field>
+        <field name="arch" type="xml">
+            <list string="VSS-130 Reimbursement Fees" class="o_bsr_vss_report_list" create="false" edit="false" delete="false">
+                <field name="source_page" string="Page"/>
+                <field name="sequence" string="SL#"/>
+                <field name="processing_date" string="Production Date"/>
+                <field name="report_date"/>
+                <field name="report_code" string="Report ID"/>
+                <field name="report_name"/>
+                <field name="reporting_for_display" string="Reporting For"/>
+                <field name="rollup_to_display" string="Rollup To"/>
+                <field name="funds_xfer_entity_display" string="Funds Xfer Entity"/>
+                <field name="settlement_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="program_network"/>
+                <field name="region_country"/>
+                <field name="fee_category"/>
+                <field name="description"/>
+                <field name="count"/>
+                <field name="interchange_amount"/>
+                <field name="interchange_direction" string="Interchange CR/DB"/>
+                <field name="fee_credit"/>
+                <field name="fee_debit"/>
+                <field name="record_type"/>
+                <field name="service_name" optional="hide"/>
+                <field name="source_report_sequence" optional="hide"/>
+                <field name="source_line_no" optional="hide"/>
+                <field name="import_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_130_consolidated" model="ir.actions.act_window">
+        <field name="name">VSS-130</field>
+        <field name="res_model">bsr.vss.130.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bsr_vss_130_consolidated_list"/>
+        <field name="search_view_id" ref="view_bsr_vss_130_consolidated_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <!-- ============================================================
+         VSS-140
+         ============================================================ -->
+    <record id="view_bsr_vss_140_consolidated_search" model="ir.ui.view">
+        <field name="name">bsr.vss.140.consolidated.search</field>
+        <field name="model">bsr.vss.140.line</field>
+        <field name="arch" type="xml">
+            <search string="Search VSS-140">
+                <field name="import_id"/>
+                <field name="processing_date"/>
+                <field name="reporting_for_display"/>
+                <field name="settlement_currency"/>
+                <field name="business_mode"/>
+                <field name="charge_category"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="description"/>
+                <group>
+                    <filter string="Production Date" name="group_processing_date_140" context="{'group_by': 'processing_date'}"/>
+                    <filter string="Reporting For" name="group_reporting_for_140" context="{'group_by': 'reporting_for_display'}"/>
+                    <filter string="Business Mode" name="group_business_mode_140" context="{'group_by': 'business_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_140_consolidated_list" model="ir.ui.view">
+        <field name="name">bsr.vss.140.consolidated.list</field>
+        <field name="model">bsr.vss.140.line</field>
+        <field name="arch" type="xml">
+            <list string="VSS-140 Visa Charges" class="o_bsr_vss_report_list" create="false" edit="false" delete="false">
+                <field name="source_page" string="Page"/>
+                <field name="sequence" string="SL#"/>
+                <field name="processing_date" string="Production Date"/>
+                <field name="report_date"/>
+                <field name="report_code" string="Report ID"/>
+                <field name="report_name"/>
+                <field name="reporting_for_display" string="Reporting For"/>
+                <field name="rollup_to_display" string="Rollup To"/>
+                <field name="funds_xfer_entity_display" string="Funds Xfer Entity"/>
+                <field name="settlement_currency"/>
+                <field name="business_mode"/>
+                <field name="charge_category"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="program_network"/>
+                <field name="region_country"/>
+                <field name="description"/>
+                <field name="count"/>
+                <field name="interchange_amount"/>
+                <field name="interchange_direction" string="Interchange CR/DB"/>
+                <field name="visa_charge_credit"/>
+                <field name="visa_charge_debit"/>
+                <field name="record_type"/>
+                <field name="service_name" optional="hide"/>
+                <field name="source_report_sequence" optional="hide"/>
+                <field name="source_line_no" optional="hide"/>
+                <field name="import_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_140_consolidated" model="ir.actions.act_window">
+        <field name="name">VSS-140</field>
+        <field name="res_model">bsr.vss.140.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bsr_vss_140_consolidated_list"/>
+        <field name="search_view_id" ref="view_bsr_vss_140_consolidated_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <!-- ============================================================
+         VSS-210
+         ============================================================ -->
+    <record id="view_bsr_vss_210_consolidated_search" model="ir.ui.view">
+        <field name="name">bsr.vss.210.consolidated.search</field>
+        <field name="model">bsr.vss.210.line</field>
+        <field name="arch" type="xml">
+            <search string="Search VSS-210">
+                <field name="import_id"/>
+                <field name="processing_date"/>
+                <field name="reporting_for_display"/>
+                <field name="settlement_currency"/>
+                <field name="clearing_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="description"/>
+                <group>
+                    <filter string="Production Date" name="group_processing_date_210" context="{'group_by': 'processing_date'}"/>
+                    <filter string="Reporting For" name="group_reporting_for_210" context="{'group_by': 'reporting_for_display'}"/>
+                    <filter string="Clearing Currency" name="group_clearing_currency_210" context="{'group_by': 'clearing_currency'}"/>
+                    <filter string="Business Mode" name="group_business_mode_210" context="{'group_by': 'business_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_210_consolidated_list" model="ir.ui.view">
+        <field name="name">bsr.vss.210.consolidated.list</field>
+        <field name="model">bsr.vss.210.line</field>
+        <field name="arch" type="xml">
+            <list string="VSS-210 Currency Conversion Fees" class="o_bsr_vss_report_list" create="false" edit="false" delete="false">
+                <field name="source_page" string="Page"/>
+                <field name="sequence" string="SL#"/>
+                <field name="processing_date" string="Production Date"/>
+                <field name="report_date"/>
+                <field name="report_code" string="Report ID"/>
+                <field name="report_name"/>
+                <field name="reporting_for_display" string="Reporting For"/>
+                <field name="rollup_to_display" string="Rollup To"/>
+                <field name="funds_xfer_entity_display" string="Funds Xfer Entity"/>
+                <field name="settlement_currency"/>
+                <field name="clearing_currency"/>
+                <field name="business_mode"/>
+                <field name="transaction_category"/>
+                <field name="transaction_type"/>
+                <field name="program_network"/>
+                <field name="description"/>
+                <field name="settlement_interchange_amount"/>
+                <field name="settlement_interchange_direction" string="Settlement CR/DB"/>
+                <field name="settlement_conversion_fee"/>
+                <field name="clearing_interchange_amount"/>
+                <field name="clearing_interchange_direction" string="Clearing CR/DB"/>
+                <field name="clearing_conversion_fee"/>
+                <field name="optional_issuer_fee"/>
+                <field name="optional_issuer_fee_direction" string="Issuer Fee CR/DB"/>
+                <field name="record_type"/>
+                <field name="service_name" optional="hide"/>
+                <field name="source_report_sequence" optional="hide"/>
+                <field name="source_line_no" optional="hide"/>
+                <field name="import_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_210_consolidated" model="ir.actions.act_window">
+        <field name="name">VSS-210</field>
+        <field name="res_model">bsr.vss.210.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_bsr_vss_210_consolidated_list"/>
+        <field name="search_view_id" ref="view_bsr_vss_210_consolidated_search"/>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+    </record>
+
+    <!-- Legacy action IDs retained so an upgraded database does not leave broken
+         bookmarks/actions from the prototype. They now open report sets (imports),
+         never separate logical VSS blocks. -->
+    <record id="action_bsr_vss_report_all" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_bsr_vss_report_110" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_bsr_vss_report_120" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_bsr_vss_report_130" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_bsr_vss_report_140" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_bsr_vss_report_210" model="ir.actions.act_window">
+        <field name="name">VSS Reports by Imported File</field>
+        <field name="res_model">bsr.vss.import</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

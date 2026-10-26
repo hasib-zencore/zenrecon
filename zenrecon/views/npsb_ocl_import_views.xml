@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_npsb_ocl_import_list" model="ir.ui.view">
+        <field name="name">npsb.ocl.import.list</field>
+        <field name="model">npsb.ocl.import</field>
+        <field name="arch" type="xml">
+            <list string="NPSB OCL Imports" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="Transactions" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_npsb_ocl_import_form" model="ir.ui.view">
+        <field name="name">npsb.ocl.import.form</field>
+        <field name="model">npsb.ocl.import</field>
+        <field name="arch" type="xml">
+            <form string="NPSB OCL Import" create="0" edit="0">
+                <header>
+                    <button name="action_download_file" type="object" string="Download Original" icon="fa-download"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_records" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="record_count" widget="statinfo" string="Transactions"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="imported_at"/>
+                            <field name="imported_by"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="file_size"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                    <field name="transaction_ids" readonly="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="drn"/>
+                            <field name="rrn"/>
+                            <field name="transaction_type_code"/>
+                            <field name="transaction_code"/>
+                            <field name="local_datetime"/>
+                            <field name="transaction_currency_code"/>
+                            <field name="transaction_amount" sum="Total"/>
+                            <field name="merchant_name"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_npsb_ocl_import_search" model="ir.ui.view">
+        <field name="name">npsb.ocl.import.search</field>
+        <field name="model">npsb.ocl.import</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="imported_by"/>
+                <field name="imported_at"/>
+                <filter name="group_importer" string="Imported By" context="{'group_by': 'imported_by'}"/>
+                <filter name="group_date" string="Import Date" context="{'group_by': 'imported_at:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_npsb_ocl_imports" model="ir.actions.act_window">
+        <field name="name">OCL Import History</field>
+        <field name="res_model">npsb.ocl.import</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_npsb_ocl_import_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Import your first NPSB OCL XML file</p>
+            <p>Each file is stored separately with its parsed transaction records.</p>
+        </field>
+    </record>
+</odoo>

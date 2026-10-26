@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mastercard_clearing_import_search" model="ir.ui.view">
+        <field name="name">mastercard.clearing.import.search</field>
+        <field name="model">mastercard.clearing.import</field>
+        <field name="arch" type="xml">
+            <search string="Search Mastercard Clearing Imports">
+                <field name="name"/>
+                <field name="filename"/>
+                <filter name="processed" string="Processed" domain="[('state', '=', 'done')]"/>
+                <filter name="errors" string="Errors" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_month" string="Import Month" context="{'group_by': 'create_date:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mastercard_clearing_import_list" model="ir.ui.view">
+        <field name="name">mastercard.clearing.import.list</field>
+        <field name="model">mastercard.clearing.import</field>
+        <field name="arch" type="xml">
+            <list string="Mastercard Clearing" create="false" edit="false">
+                <field name="name"/>
+                <field name="filename"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'error'"
+                       decoration-muted="state == 'draft'"/>
+                <field name="line_count" string="Stored Rows"/>
+                <field name="create_date" string="Imported At"/>
+                <field name="create_uid" string="Imported By" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mastercard_clearing_import_form" model="ir.ui.view">
+        <field name="name">mastercard.clearing.import.form</field>
+        <field name="model">mastercard.clearing.import</field>
+        <field name="arch" type="xml">
+            <form string="Mastercard Clearing Import" create="false">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lines" type="object" class="oe_stat_button"
+                                icon="fa-list" invisible="line_count == 0">
+                            <field name="line_count" widget="statinfo" string="Stored Rows"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Source File">
+                            <field name="filename" readonly="1"/>
+                            <field name="file" filename="filename" readonly="1"/>
+                        </group>
+                        <group string="Import Audit">
+                            <field name="create_date" string="Imported At" readonly="1"/>
+                            <field name="create_uid" string="Imported By" readonly="1"/>
+                            <field name="line_count" string="Stored Rows" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Processing Result">
+                        <field name="log" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mastercard_clearing_import_wizard_form" model="ir.ui.view">
+        <field name="name">mastercard.clearing.import.wizard.form</field>
+        <field name="model">mastercard.clearing.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Upload Mastercard Clearing File">
+                <group>
+                    <field name="file" filename="filename" string="Clearing File"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload the Mastercard clearing text report. Notification, acknowledgement,
+                    and clearing-day-total rows will be stored in a dedicated clearing table.
+                </div>
+                <footer>
+                    <button name="action_process" string="Import and Process" type="object"
+                            class="btn-primary" icon="fa-cloud-upload"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mastercard_clearing_line_list" model="ir.ui.view">
+        <field name="name">mastercard.clearing.line.list</field>
+        <field name="model">mastercard.clearing.line</field>
+        <field name="arch" type="xml">
+            <list string="Mastercard Clearing Lines">
+                <field name="import_id" optional="show"/>
+                <field name="report_id"/>
+                <field name="settled_coll_only" optional="show"/>
+                <field name="mastercard_cycle"/>
+                <field name="ack_notification"/>
+                <field name="business_service_level" optional="show"/>
+                <field name="business_service_id" optional="show"/>
+                <field name="file_id" optional="show"/>
+                <field name="member_id"/>
+                <field name="run_date"/>
+                <field name="clearing_date"/>
+                <field name="trans_func" optional="show"/>
+                <field name="proc_code" optional="show"/>
+                <field name="ird" optional="show"/>
+                <field name="counts" sum="Total Count"/>
+                <field name="recon_amount" sum="Total Reconciliation Amount"/>
+                <field name="recon_dr_cr"/>
+                <field name="recon_curr_code"/>
+                <field name="trans_fee" sum="Total Transaction Fee"/>
+                <field name="fee_dr_cr"/>
+                <field name="fee_curr_code"/>
+                <field name="net_amount" sum="Total Net Amount"/>
+                <field name="net_dr_cr"/>
+                <field name="is_day_total" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mastercard_clearing_line_form" model="ir.ui.view">
+        <field name="name">mastercard.clearing.line.form</field>
+        <field name="model">mastercard.clearing.line</field>
+        <field name="arch" type="xml">
+            <form string="Mastercard Clearing Line">
+                <sheet>
+                    <group>
+                        <group string="Source Context">
+                            <field name="import_id"/>
+                            <field name="report_id"/>
+                            <field name="mastercard_cycle"/>
+                            <field name="ack_notification"/>
+                            <field name="settled_coll_only"/>
+                            <field name="business_service_level"/>
+                            <field name="business_service_id"/>
+                            <field name="file_id"/>
+                            <field name="member_id"/>
+                            <field name="run_date"/>
+                            <field name="clearing_date"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="trans_func"/>
+                            <field name="proc_code"/>
+                            <field name="ird"/>
+                            <field name="counts"/>
+                            <field name="recon_amount"/>
+                            <field name="recon_dr_cr"/>
+                            <field name="recon_curr_code"/>
+                            <field name="trans_fee"/>
+                            <field name="fee_dr_cr"/>
+                            <field name="fee_curr_code"/>
+                            <field name="net_amount"/>
+                            <field name="net_dr_cr"/>
+                            <field name="is_day_total"/>
+                        </group>
+                    </group>
+                    <group string="Source Line">
+                        <field name="raw_line" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mastercard_clearing_import" model="ir.actions.act_window">
+        <field name="name">Clearing Imports</field>
+        <field name="res_model">mastercard.clearing.import</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mastercard_clearing_import_search"/>
+    </record>
+
+    <record id="action_mastercard_clearing_line" model="ir.actions.act_window">
+        <field name="name">Clearing Transactions</field>
+        <field name="res_model">mastercard.clearing.line</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

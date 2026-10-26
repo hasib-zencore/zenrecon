@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_accounting_report_search" model="ir.ui.view">
+        <field name="name">bsr.accounting.report.search</field>
+        <field name="model">bsr.accounting.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="configuration_id"/>
+                <field name="source_import_id"/>
+                <field name="source_report_codes"/>
+                <field name="product_type"/>
+                <filter string="Balanced" name="balanced" domain="[('state', '=', 'balanced')]"/>
+                <filter string="Exceptions" name="exception" domain="[('state', '=', 'exception')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <group>
+                    <filter string="Source Reports" name="group_report" context="{'group_by': 'source_report_codes'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Report Date" name="group_date" context="{'group_by': 'report_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_report_list" model="ir.ui.view">
+        <field name="name">bsr.accounting.report.list</field>
+        <field name="model">bsr.accounting.report</field>
+        <field name="arch" type="xml">
+            <list class="o_bsr_accounting_report_list" create="false" decoration-success="state in ('balanced', 'approved')"
+                  decoration-danger="state == 'exception'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="configuration_id"/>
+                <field name="source_import_id"/>
+                <field name="source_report_codes" string="Source Reports"/>
+                <field name="product_type"/>
+                <field name="report_date"/>
+                <field name="posting_date"/>
+                <field name="debit_total" sum="Debit"/>
+                <field name="credit_total" sum="Credit"/>
+                <field name="difference" sum="Difference"/>
+                <field name="issue_count"/>
+                <field name="state" widget="badge" decoration-success="state in ('balanced', 'approved')"
+                       decoration-danger="state == 'exception'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_report_form" model="ir.ui.view">
+        <field name="name">bsr.accounting.report.form</field>
+        <field name="model">bsr.accounting.report</field>
+        <field name="arch" type="xml">
+            <form string="Final Voucher Report" class="o_bsr_accounting_report_form" create="false" edit="false">
+                <header>
+                    <button name="action_download" type="object" string="Download XLSX" class="btn-primary" icon="fa-download" invisible="not output_file"/>
+                    <button name="action_regenerate_file" type="object" string="Regenerate" invisible="state == 'cancelled'"/>
+                    <button name="action_mark_checked" type="object" string="Mark Checked" class="btn-primary"
+                            invisible="state != 'balanced'" groups="zenrecon.group_bsr_report_checker"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary"
+                            invisible="state != 'checked'" groups="zenrecon.group_bsr_report_checker"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('approved', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,balanced,exception,checked,approved,cancelled"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="BALANCED" bg_color="text-bg-success" invisible="state != 'balanced'"/>
+                    <widget name="web_ribbon" text="MISMATCH" bg_color="text-bg-danger" invisible="state != 'exception'"/>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group string="Source and Configuration">
+                            <field name="configuration_id"/>
+                            <field name="source_import_id"/>
+                            <field name="source_report_codes" string="Source Reports"/>
+                            <field name="product_type"/>
+                        </group>
+                        <group string="Dates and Audit">
+                            <field name="production_date"/>
+                            <field name="report_date"/>
+                            <field name="posting_date"/>
+                            <field name="generated_by_id"/>
+                            <field name="generated_at"/>
+                            <field name="checked_by_id" invisible="not checked_by_id"/>
+                            <field name="checked_at" invisible="not checked_at"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-danger" role="alert" invisible="state != 'exception'">
+                        Debit and credit totals differ, or one or more source lines could not generate a voucher amount.
+                    </div>
+                    <group string="Voucher Totals" col="6">
+                        <field name="debit_total"/>
+                        <field name="credit_total"/>
+                        <field name="difference"/>
+                        <field name="issue_count"/>
+                    </group>
+                    <field name="voucher_ids" nolabel="1" readonly="1">
+                        <list create="false" edit="false" delete="false">
+                            <field name="product_type"/>
+                            <field name="line_count"/>
+                            <field name="debit_total"/>
+                            <field name="credit_total"/>
+                            <field name="difference"/>
+                            <field name="issue_count"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                        <form string="Voucher Detail">
+                            <sheet>
+                                <group>
+                                    <field name="product_type"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="debit_total"/>
+                                    <field name="credit_total"/>
+                                    <field name="difference"/>
+                                    <field name="show_currency_columns" invisible="1"/>
+                                </group>
+                                <separator string="Generated GL Lines"/>
+                                <field name="line_ids" nolabel="1">
+                                    <list create="false" edit="false" delete="false">
+                                        <field name="posting_indicator" widget="badge"/>
+                                        <field name="gl_number"/>
+                                        <field name="gl_name"/>
+                                        <field name="amount" sum="Total" column_invisible="parent.show_currency_columns"/>
+                                        <field name="amount_usd" sum="USD Total" column_invisible="not parent.show_currency_columns"/>
+                                        <field name="amount_bdt" sum="BDT Total" column_invisible="not parent.show_currency_columns"/>
+                                        <field name="conversion_rate" column_invisible="not parent.show_currency_columns" optional="hide"/>
+                                        <field name="description"/>
+                                        <field name="debit_remarks" optional="show"/>
+                                        <field name="credit_remarks" optional="show"/>
+                                        <field name="source_report_code"/>
+                                        <field name="source_row_count"/>
+                                    </list>
+                                </field>
+                                <separator string="Generation Issues" invisible="issue_count == 0"/>
+                                <field name="issue_ids" nolabel="1" invisible="issue_count == 0">
+                                    <list create="false" edit="false" delete="false"
+                                          decoration-danger="severity == 'error'" decoration-warning="severity == 'warning'">
+                                        <field name="severity" widget="badge"/>
+                                        <field name="mapping_id"/>
+                                        <field name="message"/>
+                                    </list>
+                                </field>
+                            </sheet>
+                        </form>
+                    </field>
+                    <field name="output_file" filename="output_filename" invisible="1"/>
+                    <field name="output_filename" invisible="1"/>
+                    <field name="output_mimetype" invisible="1"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_accounting_report" model="ir.actions.act_window">
+        <field name="name">Generated Vouchers</field>
+        <field name="res_model">bsr.accounting.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bsr_accounting_report_search"/>
+        <field name="context">{'create': False}</field>
+    </record>
+</odoo>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One application shell; scheme-specific functions are grouped by purpose. -->
+    <menuitem id="menu_bsr_root"
+              name="Bank Reconciliation"
+              action="action_bsr_vss_import"
+              sequence="35"
+              web_icon="zenrecon,static/description/icon.png"
+              groups="base.group_user"/>
+
+    <!-- Centralized intake. All source streams are collected from this page. -->
+    <menuitem id="menu_zenrecon_data_intake" name="Data Intake"
+              parent="menu_bsr_root" action="action_open_source_workspace"
+              sequence="2" groups="base.group_user"/>
+
+    <!-- VISA -->
+    <menuitem id="menu_bsr_visa_section" name="VISA" parent="menu_bsr_root"
+              sequence="10" groups="base.group_user"/>
+
+    <menuitem id="menu_bsr_visa_settlement_processing" name="Settlement Processing"
+              parent="menu_bsr_visa_section" sequence="10" groups="base.group_user"/>
+    <record id="menu_bsr_import_from_documents" model="ir.ui.menu">
+        <field name="name">Upload VSS File</field>
+        <field name="parent_id" ref="menu_bsr_visa_settlement_processing"/>
+        <field name="action" ref="action_bsr_vss_import_document_wizard"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="False"/>
+    </record>
+    <menuitem id="menu_bsr_vss_imports" name="VSS Import History"
+              parent="menu_bsr_visa_settlement_processing"
+              action="action_bsr_vss_import" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_reports_root" name="VSS Settlement Reports"
+              parent="menu_bsr_visa_settlement_processing"
+              action="action_bsr_vss_report_sets" sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_exceptions" name="VSS Parsing Exceptions"
+              parent="menu_bsr_visa_settlement_processing"
+              action="action_bsr_vss_exception" sequence="40" groups="base.group_user"/>
+
+    <!-- Legacy report submenus stay inactive; reports are opened from their imported file. -->
+    <record id="menu_bsr_report_110" model="ir.ui.menu">
+        <field name="name">VSS-110 Details</field><field name="parent_id" ref="menu_bsr_reports_root"/><field name="sequence">10</field><field name="active" eval="False"/>
+    </record>
+    <record id="menu_bsr_report_120" model="ir.ui.menu">
+        <field name="name">VSS-120 Details</field><field name="parent_id" ref="menu_bsr_reports_root"/><field name="sequence">20</field><field name="active" eval="False"/>
+    </record>
+    <record id="menu_bsr_report_130" model="ir.ui.menu">
+        <field name="name">VSS-130 Details</field><field name="parent_id" ref="menu_bsr_reports_root"/><field name="sequence">30</field><field name="active" eval="False"/>
+    </record>
+    <record id="menu_bsr_report_140" model="ir.ui.menu">
+        <field name="name">VSS-140 Details</field><field name="parent_id" ref="menu_bsr_reports_root"/><field name="sequence">40</field><field name="active" eval="False"/>
+    </record>
+    <record id="menu_bsr_report_210" model="ir.ui.menu">
+        <field name="name">VSS-210 Details</field><field name="parent_id" ref="menu_bsr_reports_root"/><field name="sequence">50</field><field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_bsr_visa_clearing_files" name="Clearing Files"
+              parent="menu_bsr_visa_section" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_vx_705" name="VX-705 Records"
+              parent="menu_bsr_visa_clearing_files" action="action_imported_files_705"
+              sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_vx_706" name="VX-706 Records"
+              parent="menu_bsr_visa_clearing_files" action="action_imported_files_706"
+              sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_vx_707" name="VX-707 Records"
+              parent="menu_bsr_visa_clearing_files" action="action_imported_files_707"
+              sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_vx_725" name="VX-725 Records"
+              parent="menu_bsr_visa_clearing_files" action="action_imported_files_725"
+              sequence="40" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_vx_727" name="VX-727 Records"
+              parent="menu_bsr_visa_clearing_files" action="action_imported_files_727"
+              sequence="50" groups="base.group_user"/>
+
+    <menuitem id="menu_bsr_visa_details" name="Transaction Reconciliation"
+              parent="menu_bsr_visa_section" sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_daily" name="Daily Reconciliation"
+              parent="menu_bsr_visa_details" action="action_visa_detail_daily"
+              sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_runs" name="Reconciliation Runs"
+              parent="menu_bsr_visa_details" action="action_visa_detail_runs"
+              sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_cms_imports" name="CMS Import History"
+              parent="menu_bsr_visa_details" action="action_visa_detail_cms_imports"
+              sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_cbs_imports" name="CBS Import History"
+              parent="menu_bsr_visa_details" action="action_visa_detail_cbs_imports"
+              sequence="40" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_matched" name="Matched Transactions"
+              parent="menu_bsr_visa_details" action="action_visa_detail_matched"
+              sequence="50" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_unmatched" name="Active Unmatched Transactions"
+              parent="menu_bsr_visa_details" action="action_visa_detail_unmatched"
+              sequence="60" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_archive" name="Archived Unmatched Transactions"
+              parent="menu_bsr_visa_details" action="action_visa_detail_archive"
+              sequence="70" groups="base.group_user"/>
+    <menuitem id="menu_bsr_visa_detail_configuration" name="Reconciliation Configuration"
+              parent="menu_bsr_visa_details" sequence="90" groups="base.group_system"/>
+    <menuitem id="menu_bsr_visa_detail_account_types" name="Account Types"
+              parent="menu_bsr_visa_detail_configuration" action="action_visa_detail_account_type"
+              sequence="10" groups="base.group_system"/>
+    <menuitem id="menu_bsr_visa_detail_account_rules" name="Account Classification Rules"
+              parent="menu_bsr_visa_detail_configuration" action="action_visa_detail_account_rule"
+              sequence="20" groups="base.group_system"/>
+    <menuitem id="menu_bsr_visa_detail_match_profiles" name="Source Matching Profiles"
+              parent="menu_bsr_visa_detail_configuration" action="action_visa_detail_match_profile"
+              sequence="30" groups="base.group_system"/>
+
+    <!-- Mastercard -->
+    <menuitem id="menu_bsr_mastercard_section" name="Mastercard" parent="menu_bsr_root"
+              sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_mastercard_ipm_processing" name="IPM Processing"
+              parent="menu_bsr_mastercard_section" sequence="10" groups="base.group_user"/>
+    <record id="menu_bsr_ipm_upload" model="ir.ui.menu">
+        <field name="name">Upload IPM File</field>
+        <field name="parent_id" ref="menu_bsr_mastercard_ipm_processing"/>
+        <field name="action" ref="action_bsr_ipm_import_wizard"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="False"/>
+    </record>
+    <menuitem id="menu_bsr_ipm_imports" name="IPM Import History"
+              parent="menu_bsr_mastercard_ipm_processing" action="action_bsr_ipm_import"
+              sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_ipm_records" name="IPM Transactions"
+              parent="menu_bsr_mastercard_ipm_processing" action="action_bsr_ipm_record"
+              sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_ipm_errors" name="IPM Parsing Errors"
+              parent="menu_bsr_mastercard_ipm_processing" action="action_bsr_ipm_error"
+              sequence="40" groups="base.group_user"/>
+
+    <menuitem id="menu_bsr_mastercard_clearing_processing" name="Clearing Processing"
+              parent="menu_bsr_mastercard_section" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_mastercard_root" name="Clearing Imports"
+              parent="menu_bsr_mastercard_clearing_processing"
+              action="action_mastercard_clearing_import" sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_mastercard_clearing_lines" name="Clearing Transactions"
+              parent="menu_bsr_mastercard_clearing_processing"
+              action="action_mastercard_clearing_line" sequence="20" groups="base.group_user"/>
+
+    <!-- NPSB -->
+    <menuitem id="menu_bsr_npsb_section" name="NPSB" parent="menu_bsr_root"
+              sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_npsb_ocl_processing" name="OCL Processing"
+              parent="menu_bsr_npsb_section" sequence="10" groups="base.group_user"/>
+    <record id="menu_bsr_npsb_ocl_upload" model="ir.ui.menu">
+        <field name="name">Upload OCL File</field>
+        <field name="parent_id" ref="menu_bsr_npsb_ocl_processing"/>
+        <field name="action" ref="action_oic_xml_import_wizard"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="False"/>
+    </record>
+    <menuitem id="menu_bsr_npsb_ocl" name="OCL Import History"
+              parent="menu_bsr_npsb_ocl_processing" action="action_npsb_ocl_imports"
+              sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_npsb_ocl_transactions" name="OCL Transactions"
+              parent="menu_bsr_npsb_ocl_processing" action="action_oic_xml_transaction"
+              sequence="30" groups="base.group_user"/>
+
+    <menuitem id="menu_bsr_npsb_settlement_processing" name="Settlement Processing"
+              parent="menu_bsr_npsb_section" sequence="20" groups="base.group_user"/>
+    <record id="menu_bsr_npsb_settlement_upload" model="ir.ui.menu">
+        <field name="name">Upload Settlement Report</field>
+        <field name="parent_id" ref="menu_bsr_npsb_settlement_processing"/>
+        <field name="action" ref="action_npsb_settlement_upload_wizard"/>
+        <field name="sequence">10</field>
+        <field name="active" eval="False"/>
+    </record>
+    <menuitem id="menu_bsr_npsb_settlement_reports" name="Settlement Reports"
+              parent="menu_bsr_npsb_settlement_processing"
+              action="action_npsb_settlement_report" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_bsr_npsb_settlement_summary" name="Settlement Summary"
+              parent="menu_bsr_npsb_settlement_processing"
+              action="action_npsb_settlement_summary_line" sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_npsb_settlement_details" name="Settlement Details"
+              parent="menu_bsr_npsb_settlement_processing"
+              action="action_npsb_settlement_detail_line" sequence="40" groups="base.group_user"/>
+
+    <menuitem id="menu_bsr_npsb_accounting_configuration" name="Accounting Configuration"
+              parent="menu_bsr_npsb_section" sequence="30" groups="base.group_user"/>
+    <menuitem id="menu_bsr_npsb_settlement_configuration" name="Settlement Voucher Rules"
+              parent="menu_bsr_npsb_accounting_configuration"
+              action="action_npsb_settlement_configuration" sequence="10" groups="base.group_user"/>
+</odoo>

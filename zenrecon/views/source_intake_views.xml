@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zenrecon_source_workspace_form" model="ir.ui.view">
+        <field name="name">zenrecon.source.workspace.form</field>
+        <field name="model">zenrecon.source.workspace</field>
+        <field name="arch" type="xml">
+            <form string="Source Folders &amp; Files" class="o_zenrecon_source_workspace">
+                <header>
+                    <button name="action_open_export_wizard" type="object" string="Export Files"
+                            class="btn-primary" icon="fa-download"/>
+                    <button name="action_scan_now" type="object" string="Scan Now"
+                            class="btn-secondary" icon="fa-refresh"/>
+                    <button name="action_open_folder_configuration" type="object"
+                            string="Configure Folders" icon="fa-cog" groups="base.group_system"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_folder_configuration" type="object" class="oe_stat_button" icon="fa-folder-open">
+                            <field name="configured_folder_count" widget="statinfo" string="Configured Folders"/>
+                        </button>
+                        <button name="action_open_files" type="object" class="oe_stat_button" icon="fa-files-o">
+                            <field name="files_today_count" widget="statinfo" string="Files Today"/>
+                        </button>
+                        <button name="action_open_files" type="object" class="oe_stat_button" icon="fa-check-circle">
+                            <field name="processed_today_count" widget="statinfo" string="Processed Today"/>
+                        </button>
+                        <button name="action_open_files" type="object" class="oe_stat_button" icon="fa-exclamation-triangle">
+                            <field name="issue_count" widget="statinfo" string="Missing / Error"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                        <p class="text-muted">One controlled intake point for every VISA, Mastercard, NPSB, CMS, and CBS source file.</p>
+                    </div>
+                    <group>
+                        <group string="Logical workspace">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="name" readonly="1"/>
+                            <field name="active" groups="base.group_system"/>
+                        </group>
+                        <group string="Daily operation">
+                            <div class="alert alert-info" role="alert" colspan="2">
+                                Each logical folder is mapped to its own PC or shared directory.
+                                <strong>Export Files</strong> scans those configured directories and sends each file to its existing parser.
+                                Choose all folders or selected streams in the popup. Previously completed files are skipped safely.
+                            </div>
+                        </group>
+                    </group>
+                    <div class="row g-3 mt-2 o_zenrecon_intake_panels">
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="o_zenrecon_panel h-100">
+                                <div class="o_zenrecon_panel_title">Folder structure</div>
+                                <field name="folder_tree_html" widget="html" nolabel="1" readonly="1"/>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="o_zenrecon_panel h-100">
+                                <div class="o_zenrecon_panel_title">Folder configuration &amp; current status</div>
+                                <field name="folder_ids" nolabel="1" readonly="1">
+                                    <list decoration-success="last_status == 'processed'"
+                                          decoration-info="last_status == 'ready'"
+                                          decoration-danger="last_status in ('missing', 'error')">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="domain_name"/>
+                                        <field name="stream_name"/>
+                                        <field name="relative_path" string="Logical Folder"/>
+                                        <field name="source_path" string="PC / Shared Folder Path" optional="show"/>
+                                        <field name="file_pattern"/>
+                                        <field name="expected_by" optional="hide"/>
+                                        <field name="last_file_id" optional="show"/>
+                                        <field name="last_status" widget="badge"/>
+                                        <field name="last_scan_at" optional="show"/>
+                                    </list>
+                                </field>
+                            </div>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page string="Recent file status">
+                            <field name="file_ids" nolabel="1" readonly="1">
+                                <list default_order="scan_date desc, modified_at desc"
+                                      decoration-success="state == 'processed'"
+                                      decoration-info="state == 'ready'"
+                                      decoration-danger="state in ('missing', 'error')">
+                                    <field name="scan_date"/>
+                                    <field name="folder_id"/>
+                                    <field name="file_name"/>
+                                    <field name="relative_file_path"/>
+                                    <field name="source_directory" optional="show"/>
+                                    <field name="file_size" widget="integer" optional="show"/>
+                                    <field name="modified_at" optional="show"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="message" optional="show"/>
+                                    <field name="import_res_id" column_invisible="True"/>
+                                    <button name="action_open_import" type="object" icon="fa-external-link"
+                                            title="Open imported record" invisible="not import_res_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_folder_search" model="ir.ui.view">
+        <field name="name">zenrecon.source.folder.search</field>
+        <field name="model">zenrecon.source.folder</field>
+        <field name="arch" type="xml">
+            <search string="Source Folders">
+                <field name="name"/>
+                <field name="domain_name"/>
+                <field name="stream_name"/>
+                <field name="relative_path"/>
+                <field name="source_path"/>
+                <field name="parser_type"/>
+                <filter name="issues" string="Missing / Error" domain="[('last_status', 'in', ('missing', 'error'))]"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <group>
+                    <filter name="group_domain" string="Domain" context="{'group_by': 'domain_name'}"/>
+                    <filter name="group_status" string="Status" context="{'group_by': 'last_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_folder_list" model="ir.ui.view">
+        <field name="name">zenrecon.source.folder.list</field>
+        <field name="model">zenrecon.source.folder</field>
+        <field name="arch" type="xml">
+            <list string="Source Folders" multi_edit="1" editable="bottom" create="0" delete="0"
+                  decoration-success="last_status == 'processed'"
+                  decoration-info="last_status == 'ready'"
+                  decoration-danger="last_status in ('missing', 'error')">
+                <header>
+                    <button name="action_open_export_wizard" type="object" string="Export Selected"
+                            class="btn-primary" icon="fa-download"/>
+                </header>
+                <field name="sequence" widget="handle"/>
+                <field name="domain_name"/>
+                <field name="stream_name"/>
+                <field name="relative_path" readonly="1"/>
+                <field name="source_path" required="1"/>
+                <field name="file_pattern"/>
+                <field name="parser_type" readonly="1"/>
+                <field name="expected_by" optional="show"/>
+                <field name="last_file_id" optional="show"/>
+                <field name="last_status" widget="badge"/>
+                <field name="last_scan_at" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_folder_form" model="ir.ui.view">
+        <field name="name">zenrecon.source.folder.form</field>
+        <field name="model">zenrecon.source.folder</field>
+        <field name="arch" type="xml">
+            <form string="Source Folder Configuration">
+                <header>
+                    <button name="action_open_export_wizard" type="object" string="Export This Stream"
+                            class="btn-primary" icon="fa-download"/>
+                    <field name="last_status" widget="statusbar" statusbar_visible="never,ready,processed,missing,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group string="Folder identity">
+                            <field name="workspace_id" readonly="1"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                            <field name="domain_name"/>
+                            <field name="stream_name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="File collection">
+                            <field name="relative_path" readonly="1"/>
+                            <field name="source_path" required="1"
+                                   placeholder="/home/user/BankRecon/IN/Issuing/VISA/VSS"/>
+                            <field name="file_pattern" placeholder="*{YYYYMMDD}*.txt"/>
+                            <field name="parser_type"/>
+                            <field name="expected_by"/>
+                            <field name="last_scan_at" readonly="1"/>
+                            <field name="last_file_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-secondary" role="alert">
+                        The logical folder controls the Figma-style tree. The PC / Shared Folder Path is the exact independent source directory.
+                        Date tokens supported in file patterns: {YYYYMMDD}, {DDMMYYYY}, {DDMMYY}, {YYYY-MM-DD}, and {YYYYMM}.
+                    </div>
+                    <group string="Latest scan result"><field name="last_message" nolabel="1" readonly="1"/></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_file_search" model="ir.ui.view">
+        <field name="name">zenrecon.source.file.search</field>
+        <field name="model">zenrecon.source.file</field>
+        <field name="arch" type="xml">
+            <search string="Source File Status">
+                <field name="file_name"/>
+                <field name="folder_id"/>
+                <field name="relative_file_path"/>
+                <filter name="today" string="Today" domain="[('scan_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="issues" string="Errors" domain="[('state', '=', 'error')]"/>
+                <filter name="processed" string="Processed" domain="[('state', '=', 'processed')]"/>
+                <group>
+                    <filter name="group_folder" string="Folder" context="{'group_by': 'folder_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_date" string="Scan Date" context="{'group_by': 'scan_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_file_list" model="ir.ui.view">
+        <field name="name">zenrecon.source.file.list</field>
+        <field name="model">zenrecon.source.file</field>
+        <field name="arch" type="xml">
+            <list string="Source File Status" create="0" edit="0" delete="0"
+                  decoration-success="state == 'processed'" decoration-info="state == 'ready'"
+                  decoration-danger="state in ('missing', 'error')">
+                <field name="scan_date"/>
+                <field name="folder_id"/>
+                <field name="parser_type" optional="show"/>
+                <field name="file_name"/>
+                <field name="relative_file_path"/>
+                <field name="source_directory" optional="show"/>
+                <field name="file_size" optional="show"/>
+                <field name="modified_at" optional="show"/>
+                <field name="state" widget="badge"/>
+                <field name="processed_at" optional="show"/>
+                <field name="message" optional="show"/>
+                <field name="import_res_id" column_invisible="True"/>
+                <button name="action_open_import" type="object" icon="fa-external-link"
+                        title="Open imported record" invisible="not import_res_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_file_form" model="ir.ui.view">
+        <field name="name">zenrecon.source.file.form</field>
+        <field name="model">zenrecon.source.file</field>
+        <field name="arch" type="xml">
+            <form string="Source File Status" create="0" edit="0" delete="0">
+                <header>
+                    <field name="import_res_id" invisible="1"/>
+                    <button name="action_open_import" type="object" string="Open Imported Record"
+                            class="btn-primary" invisible="not import_res_id"/>
+                    <field name="state" widget="statusbar" statusbar_visible="ready,processing,processed,error,missing"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="file_name"/><h1><field name="file_name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="folder_id"/>
+                            <field name="parser_type"/>
+                            <field name="scan_date"/>
+                            <field name="relative_file_path"/>
+                            <field name="source_directory"/>
+                            <field name="absolute_path" groups="base.group_system"/>
+                        </group>
+                        <group>
+                            <field name="file_size"/>
+                            <field name="modified_at"/>
+                            <field name="last_seen_at"/>
+                            <field name="processed_at"/>
+                            <field name="processed_by_id"/>
+                        </group>
+                    </group>
+                    <group string="Result"><field name="message" nolabel="1"/></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zenrecon_source_export_wizard_form" model="ir.ui.view">
+        <field name="name">zenrecon.source.export.wizard.form</field>
+        <field name="model">zenrecon.source.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Source Files">
+                <div class="alert alert-info" role="alert">
+                    Files are read from the configured root and processed through their existing ZenRecon parsers.
+                    Completed file identities are always skipped to prevent duplicate processing.
+                </div>
+                <group>
+                    <field name="workspace_id" readonly="1"/>
+                    <field name="business_date"/>
+                    <field name="scope" widget="radio"/>
+                    <field name="folder_ids" widget="many2many_tags" invisible="scope != 'selected'"
+                           required="scope == 'selected'" options="{'no_create': True}"/>
+                </group>
+                <footer>
+                    <button name="action_export_and_process" type="object" string="Export &amp; Process"
+                            class="btn-primary" icon="fa-download"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zenrecon_source_folder" model="ir.actions.act_window">
+        <field name="name">Source Folder Configuration</field>
+        <field name="res_model">zenrecon.source.folder</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_zenrecon_source_folder_search"/>
+    </record>
+    <record id="action_zenrecon_source_file" model="ir.actions.act_window">
+        <field name="name">Source File Status</field>
+        <field name="res_model">zenrecon.source.file</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_zenrecon_source_file_search"/>
+    </record>
+    <record id="action_open_source_workspace" model="ir.actions.server">
+        <field name="name">Source Folders &amp; Files</field>
+        <field name="model_id" ref="model_zenrecon_source_workspace"/>
+        <field name="state">code</field>
+        <field name="code">action = env['zenrecon.source.workspace'].action_open_current()</field>
+    </record>
+</odoo>

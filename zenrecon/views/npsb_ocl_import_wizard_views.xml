@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_oic_xml_import_wizard_form" model="ir.ui.view">
+        <field name="name">npsb.ocl.import.wizard.form</field>
+        <field name="model">npsb.ocl.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import NPSB OCL XML File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                    <field name="skip_duplicates"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload an OIC DocFile XML export. Each &lt;Doc&gt; transaction will be parsed and saved permanently in the database.
+                    DRN/RRN/ARN, dispute, merchant, origin/destination, transaction, billing and reconciliation data are stored.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import XML &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_oic_xml_import_wizard" model="ir.actions.act_window">
+        <field name="name">Upload OCL File</field>
+        <field name="res_model">npsb.ocl.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

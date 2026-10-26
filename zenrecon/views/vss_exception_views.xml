@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_vss_exception_search" model="ir.ui.view">
+        <field name="name">bsr.vss.exception.search</field>
+        <field name="model">bsr.vss.exception</field>
+        <field name="arch" type="xml">
+            <search string="Search Parsing Exceptions">
+                <field name="import_id"/>
+                <field name="report_code"/>
+                <field name="reporting_for"/>
+                <field name="severity"/>
+                <field name="source_line_no"/>
+                <filter string="Errors" name="errors" domain="[('severity', '=', 'error')]"/>
+                <filter string="Warnings" name="warnings" domain="[('severity', '=', 'warning')]"/>
+                <group>
+                    <filter string="Severity" name="group_severity" context="{'group_by': 'severity'}"/>
+                    <filter string="Import" name="group_import" context="{'group_by': 'import_id'}"/>
+                    <filter string="Report ID" name="group_report_code" context="{'group_by': 'report_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_exception_list" model="ir.ui.view">
+        <field name="name">bsr.vss.exception.list</field>
+        <field name="model">bsr.vss.exception</field>
+        <field name="arch" type="xml">
+            <list string="Parsing Exceptions" class="o_bsr_vss_exception_list" create="false" delete="false" edit="false"
+                  decoration-danger="severity == 'error'" decoration-warning="severity == 'warning'">
+                <field name="severity"/>
+                <field name="import_id"/>
+                <field name="report_code"/>
+                <field name="source_report_sequence"/>
+                <field name="reporting_for"/>
+                <field name="source_line_no"/>
+                <field name="message"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_vss_exception_form" model="ir.ui.view">
+        <field name="name">bsr.vss.exception.form</field>
+        <field name="model">bsr.vss.exception</field>
+        <field name="arch" type="xml">
+            <form string="Parsing Exception" class="o_bsr_vss_exception_form" create="false" delete="false" edit="false">
+                <sheet>
+                    <group>
+                        <field name="severity"/>
+                        <field name="import_id"/>
+                        <field name="attachment_id" string="Source File"/>
+                        <field name="report_code"/>
+                        <field name="source_report_sequence"/>
+                        <field name="reporting_for"/>
+                        <field name="source_line_no"/>
+                    </group>
+                    <group string="Message">
+                        <field name="message" nolabel="1"/>
+                    </group>
+                    <group string="Raw Source">
+                        <field name="raw_line" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_vss_exception" model="ir.actions.act_window">
+        <field name="name">VSS Parsing Exceptions</field>
+        <field name="res_model">bsr.vss.exception</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bsr_vss_exception_search"/>
+    </record>
+</odoo>

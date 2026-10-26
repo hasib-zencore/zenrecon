@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_visa_vx_705_import_wizard_form" model="ir.ui.view">
+        <field name="name">visa.vx.705.import.wizard.form</field>
+        <field name="model">visa.vx.705.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import VX-705 Text File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload a Visa VX-705 text report. Imported Sales Draft data will be saved permanently in the database.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_vx_705_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import VX-705 Text File</field>
+        <field name="res_model">visa.vx.705.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_visa_vx_706_import_wizard_form" model="ir.ui.view">
+        <field name="name">visa.vx.706.import.wizard.form</field>
+        <field name="model">visa.vx.706.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import VX-706 Text File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload a Visa VX-706 text report. Imported Credit Voucher data will be saved permanently in the database.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_vx_706_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import VX-706 Text File</field>
+        <field name="res_model">visa.vx.706.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_visa_vx_707_import_wizard_form" model="ir.ui.view">
+        <field name="name">visa.vx.707.import.wizard.form</field>
+        <field name="model">visa.vx.707.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import VX-707 Text File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload a Visa VX-707 text report. Imported Cash Disbursement and Chip Card Transaction data will be saved permanently in the database.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_vx_707_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import VX-707 Text File</field>
+        <field name="res_model">visa.vx.707.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_visa_vx_725_import_wizard_form" model="ir.ui.view">
+        <field name="name">visa.vx.725.import.wizard.form</field>
+        <field name="model">visa.vx.725.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import VX-725 Text File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload a Visa VX-725 text report. Imported Sales Draft Reversal data will be saved permanently in the database.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_vx_725_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import VX-725 Text File</field>
+        <field name="res_model">visa.vx.725.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_visa_vx_727_import_wizard_form" model="ir.ui.view">
+        <field name="name">visa.vx.727.import.wizard.form</field>
+        <field name="model">visa.vx.727.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import VX-727 Text File">
+                <group>
+                    <field name="filename" invisible="1"/>
+                    <field name="file" filename="filename" required="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload a Visa VX-727 text report. Imported Cash Disbursement Reversal data will be saved permanently in the database.
+                </div>
+                <footer>
+                    <button name="action_import" type="object" string="Import &amp; Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_visa_vx_727_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import VX-727 Text File</field>
+        <field name="res_model">visa.vx.727.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

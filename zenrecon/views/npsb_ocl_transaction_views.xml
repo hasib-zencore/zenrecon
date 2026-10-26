@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+
+    <record id="view_oic_xml_transaction_list" model="ir.ui.view">
+        <field name="name">npsb.ocl.transaction.list</field>
+        <field name="model">npsb.ocl.transaction</field>
+        <field name="arch" type="xml">
+            <list string="NPSB OCL Transactions" decoration-muted="not active">
+
+                <field name="sender"/>
+                <field name="receiver"/>
+                <field name="creation_date"/>
+                <field name="creation_time"/>
+                <field name="file_sequence_number" optional="hide"/>
+                <field name="source_file_name" optional="hide"/>
+                <field name="source_record_number" optional="hide"/>
+                <field name="imported_at" optional="hide"/>
+
+                <!-- Transaction Type -->
+                <field name="msg_code"/>
+                <field name="fin_category"/>
+                <field name="request_category"/>
+                <field name="service_class"/>
+                <field name="transaction_type_code"/>
+                <field name="transaction_condition" optional="hide"/>
+                <field name="original_transaction_condition" optional="hide"/>
+                <field name="dispute_reason_code"/>
+                <field name="dispute_reason_details" optional="hide"/>
+
+                <!-- Document References -->
+                <field name="drn"/>
+                <field name="previous_drn" optional="hide"/>
+                <field name="original_drn" optional="hide"/>
+                <field name="summary_drn" optional="hide"/>
+                <field name="srn" optional="hide"/>
+                <field name="irn" optional="hide"/>
+                <field name="rrn"/>
+                <field name="arn"/>
+                <field name="auth_code"/>
+                <field name="trn" optional="hide"/>
+                <field name="reference_parameters" optional="hide"/>
+
+                <!-- Dates / Source Details -->
+                <field name="local_datetime"/>
+                <field name="network_datetime" optional="hide"/>
+                <field name="sic"/>
+                <field name="country"/>
+                <field name="city"/>
+                <field name="merchant_name"/>
+                <field name="merchant_id"/>
+
+                <!-- Originator -->
+                <field name="originator_contract_number"/>
+                <field name="originator_member_id" optional="hide"/>
+                <field name="originator_transit_id" optional="hide"/>
+                <field name="originator_card_expiry" optional="hide"/>
+                <field name="originator_card_sequence" optional="hide"/>
+                <field name="originator_channel" optional="hide"/>
+
+                <!-- Destination -->
+                <field name="destination_contract_number"/>
+                <field name="destination_relation" optional="hide"/>
+                <field name="destination_member_id" optional="hide"/>
+                <field name="destination_transit_id" optional="hide"/>
+                <field name="destination_card_expiry" optional="hide"/>
+                <field name="destination_card_sequence" optional="hide"/>
+                <field name="destination_channel" optional="hide"/>
+
+                <!-- Transaction -->
+                <field name="transaction_currency_code"/>
+                <field name="transaction_amount" sum="Total Amount"/>
+                <field name="transaction_amount_raw" optional="hide"/>
+                <field name="extra_type" optional="hide"/>
+                <field name="transaction_code"/>
+                <field name="additional_parameters" optional="hide"/>
+
+                <!-- Billing -->
+                <field name="billing_date"/>
+                <field name="billing_currency_code" optional="hide"/>
+                <field name="billing_amount"/>
+                <field name="billing_amount_raw" optional="hide"/>
+
+                <!-- Reconciliation -->
+                <field name="reconciliation_date"/>
+                <field name="reconciliation_currency_code" optional="hide"/>
+                <field name="reconciliation_amount"/>
+                <field name="reconciliation_amount_raw" optional="hide"/>
+
+                <field name="original_transaction_datetime" optional="hide"/>
+
+                <field name="active" column_invisible="True"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_oic_xml_transaction_form" model="ir.ui.view">
+        <field name="name">npsb.ocl.transaction.form</field>
+        <field name="model">npsb.ocl.transaction</field>
+        <field name="arch" type="xml">
+            <form string="NPSB OCL Transaction">
+                <sheet>
+                    <group>
+                        <group string="Transaction Reference">
+                            <field name="drn"/>
+                            <field name="previous_drn"/>
+                            <field name="original_drn"/>
+                            <field name="summary_drn"/>
+                            <field name="srn"/>
+                            <field name="irn"/>
+                            <field name="rrn"/>
+                            <field name="arn"/>
+                            <field name="auth_code"/>
+                            <field name="trn"/>
+                        </group>
+                        <group string="Transaction">
+                            <field name="local_datetime"/>
+                            <field name="network_datetime"/>
+                            <field name="msg_code"/>
+                            <field name="fin_category"/>
+                            <field name="request_category"/>
+                            <field name="service_class"/>
+                            <field name="transaction_type_code"/>
+                            <field name="transaction_code"/>
+                            <field name="transaction_currency_code"/>
+                            <field name="transaction_amount"/>
+                            <field name="transaction_amount_raw"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Merchant / Source">
+                            <group>
+                                <group>
+                                    <field name="sic"/>
+                                    <field name="country"/>
+                                    <field name="city"/>
+                                </group>
+                                <group>
+                                    <field name="merchant_name"/>
+                                    <field name="merchant_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Originator / Destination">
+                            <group>
+                                <group string="Originator">
+                                    <field name="originator_contract_number"/>
+                                    <field name="originator_member_id"/>
+                                    <field name="originator_transit_id"/>
+                                    <field name="originator_card_expiry"/>
+                                    <field name="originator_card_sequence"/>
+                                    <field name="originator_channel"/>
+                                </group>
+                                <group string="Destination">
+                                    <field name="destination_contract_number"/>
+                                    <field name="destination_relation"/>
+                                    <field name="destination_member_id"/>
+                                    <field name="destination_transit_id"/>
+                                    <field name="destination_card_expiry"/>
+                                    <field name="destination_card_sequence"/>
+                                    <field name="destination_channel"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Billing / Reconciliation">
+                            <group>
+                                <group string="Billing">
+                                    <field name="billing_date"/>
+                                    <field name="billing_currency_code"/>
+                                    <field name="billing_amount"/>
+                                    <field name="billing_amount_raw"/>
+                                </group>
+                                <group string="Reconciliation">
+                                    <field name="reconciliation_date"/>
+                                    <field name="reconciliation_currency_code"/>
+                                    <field name="reconciliation_amount"/>
+                                    <field name="reconciliation_amount_raw"/>
+                                </group>
+                            </group>
+                            <group string="Chain">
+                                <field name="original_transaction_datetime"/>
+                            </group>
+                        </page>
+
+                        <page string="Dispute / Conditions">
+                            <group>
+                                <field name="dispute_reason_code"/>
+                                <field name="dispute_reason_details"/>
+                                <field name="transaction_condition"/>
+                                <field name="original_transaction_condition"/>
+                            </group>
+                        </page>
+
+                        <page string="All XML Parameters">
+                            <group>
+                                <field name="extra_type"/>
+                                <field name="reference_parameters" widget="text"/>
+                                <field name="additional_parameters" widget="text"/>
+                            </group>
+                        </page>
+
+                        <page string="File / Import Info">
+                            <group>
+                                <group>
+                                    <field name="file_label"/>
+                                    <field name="format_version"/>
+                                    <field name="sender"/>
+                                    <field name="receiver"/>
+                                    <field name="creation_date"/>
+                                    <field name="creation_time"/>
+                                </group>
+                                <group>
+                                    <field name="file_sequence_number"/>
+                                    <field name="source_file_name"/>
+                                    <field name="source_record_number"/>
+                                    <field name="imported_at"/>
+                                    <field name="company_id"/>
+                                    <field name="active"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_oic_xml_transaction_search" model="ir.ui.view">
+        <field name="name">npsb.ocl.transaction.search</field>
+        <field name="model">npsb.ocl.transaction</field>
+        <field name="arch" type="xml">
+            <search string="Search NPSB OCL Transactions">
+                <field name="drn"/>
+                <field name="rrn"/>
+                <field name="arn"/>
+                <field name="auth_code"/>
+                <field name="merchant_name"/>
+                <field name="merchant_id"/>
+                <field name="city"/>
+                <field name="transaction_type_code"/>
+                <field name="transaction_code"/>
+                <field name="destination_contract_number"/>
+                <field name="source_file_name"/>
+                <filter name="has_dispute" string="Disputes" domain="[('dispute_reason_code', '!=', False)]"/>
+                <filter name="group_type" string="Transaction Type" context="{'group_by': 'transaction_type_code'}"/>
+                <filter name="group_code" string="Transaction Code" context="{'group_by': 'transaction_code'}"/>
+                <filter name="group_city" string="City" context="{'group_by': 'city'}"/>
+                <filter name="group_file" string="Source File" context="{'group_by': 'source_file_name'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_oic_xml_transaction" model="ir.actions.act_window">
+        <field name="name">OCL Transactions</field>
+        <field name="res_model">npsb.ocl.transaction</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_oic_xml_transaction_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No NPSB OCL transactions yet.</p>
+            <p>Use <strong>Import XML File</strong> to upload a DocFile XML export and save its transactions permanently.</p>
+        </field>
+    </record>
+</odoo>

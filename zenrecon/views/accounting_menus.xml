@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client actions are declared before menus so fresh installations resolve cleanly. -->
+    <record id="action_bsr_suite_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">zenrecon.dashboard</field>
+    </record>
+    <record id="action_bsr_voucher_entries" model="ir.actions.client">
+        <field name="name">Voucher Register</field>
+        <field name="tag">zenrecon.voucher_entries</field>
+    </record>
+    <record id="action_bsr_notifications" model="ir.actions.client">
+        <field name="name">Notifications</field>
+        <field name="tag">zenrecon.notifications</field>
+    </record>
+    <record id="action_bsr_users_access" model="ir.actions.client">
+        <field name="name">Users &amp; Access</field>
+        <field name="tag">zenrecon.users_access</field>
+    </record>
+    <record id="action_bsr_roles_permissions" model="ir.actions.client">
+        <field name="name">Roles &amp; Permissions</field>
+        <field name="tag">zenrecon.roles_permissions</field>
+    </record>
+
+    <menuitem id="menu_bsr_suite_dashboard" name="Dashboard"
+              parent="zenrecon.menu_bsr_root"
+              action="action_bsr_suite_dashboard" sequence="1"
+              groups="zenrecon.group_bsr_report_operator"/>
+
+    <!-- Cross-scheme voucher operations. -->
+    <menuitem id="menu_bsr_suite_accounting_run" name="Voucher Management"
+              parent="zenrecon.menu_bsr_root" sequence="40"
+              groups="zenrecon.group_bsr_report_operator"/>
+    <record id="menu_bsr_suite_accounting_run" model="ir.ui.menu">
+        <field name="action" eval="False"/>
+    </record>
+    <menuitem id="menu_bsr_suite_visa_voucher_runs" name="VISA Voucher Runs"
+              parent="menu_bsr_suite_accounting_run" action="action_bsr_accounting_run"
+              sequence="10" groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_npsb_voucher_runs" name="NPSB Voucher Runs"
+              parent="menu_bsr_suite_accounting_run"
+              action="zenrecon.action_npsb_settlement_voucher_run"
+              sequence="20" groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_voucher_register" name="Voucher Register"
+              parent="menu_bsr_suite_accounting_run" action="action_bsr_voucher_entries"
+              sequence="30" groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_generated_vouchers" name="Generated Vouchers"
+              parent="menu_bsr_suite_accounting_run" action="action_bsr_accounting_report"
+              sequence="40" groups="zenrecon.group_bsr_report_operator"/>
+
+    <!-- VISA accounting extension under the core VISA section. -->
+    <menuitem id="menu_bsr_suite_visa" name="Accounting Configuration"
+              parent="zenrecon.menu_bsr_visa_section" sequence="40"
+              groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_visa_setup" name="VISA Business Mapping"
+              parent="menu_bsr_suite_visa" action="action_bsr_visa_setup" sequence="10"
+              groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_accounting_setup" name="VISA Voucher Rules"
+              parent="menu_bsr_suite_visa" action="action_bsr_accounting_configuration" sequence="20"
+              groups="zenrecon.group_bsr_report_operator"/>
+
+    <!-- Operational monitoring. -->
+    <menuitem id="menu_bsr_suite_monitoring" name="Monitoring"
+              parent="zenrecon.menu_bsr_root" sequence="50"
+              groups="zenrecon.group_bsr_report_operator"/>
+    <menuitem id="menu_bsr_suite_notifications" name="Notifications"
+              parent="menu_bsr_suite_monitoring" action="action_bsr_notifications" sequence="10"
+              groups="zenrecon.group_bsr_report_operator"/>
+
+    <!-- Sensitive administration pages remain system-administrator only. -->
+    <menuitem id="menu_bsr_suite_administration" name="Administration"
+              parent="zenrecon.menu_bsr_root" sequence="60"
+              groups="base.group_system"/>
+    <menuitem id="menu_bsr_suite_users_access" name="Users &amp; Access"
+              parent="menu_bsr_suite_administration" action="action_bsr_users_access"
+              sequence="10" groups="base.group_system"/>
+    <menuitem id="menu_bsr_suite_roles_permissions" name="Roles &amp; Permissions"
+              parent="menu_bsr_suite_administration" action="action_bsr_roles_permissions"
+              sequence="20" groups="base.group_system"/>
+</odoo>

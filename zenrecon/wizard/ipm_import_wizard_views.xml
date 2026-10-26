@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_ipm_import_wizard_form" model="ir.ui.view">
+        <field name="name">bsr.ipm.import.wizard.form</field>
+        <field name="model">bsr.ipm.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Mastercard IPM File">
+                <group>
+                    <field name="upload_file" filename="upload_filename"/>
+                    <field name="upload_filename" invisible="1"/>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    Upload the Mastercard file from your computer. The original file is retained with the import; records remain separate from VISA VSS data and PAN values are masked.
+                </div>
+                <footer>
+                    <button name="action_import_and_process" string="Import and Process" type="object"
+                            class="btn-primary" icon="fa-cloud-upload"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_ipm_import_wizard" model="ir.actions.act_window">
+        <field name="name">Upload Mastercard File</field>
+        <field name="res_model">bsr.ipm.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

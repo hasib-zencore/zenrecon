@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_visa_import_batch_list_705" model="ir.ui.view">
+        <field name="name">visa.import.batch.list.705</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record><record id="view_visa_import_batch_list_706" model="ir.ui.view">
+        <field name="name">visa.import.batch.list.706</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record><record id="view_visa_import_batch_list_707" model="ir.ui.view">
+        <field name="name">visa.import.batch.list.707</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record><record id="view_visa_import_batch_list_725" model="ir.ui.view">
+        <field name="name">visa.import.batch.list.725</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record><record id="view_visa_import_batch_list_727" model="ir.ui.view">
+        <field name="name">visa.import.batch.list.727</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record><record id="view_visa_import_batch_list" model="ir.ui.view">
+        <field name="name">visa.import.batch.list</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <list string="Imported Files" create="0" default_order="imported_at desc">
+                <field name="name"/>
+                <field name="report_type" optional="show"/>
+                <field name="imported_at"/>
+                <field name="imported_by"/>
+                <field name="record_count"/>
+                <field name="file_size" optional="hide"/>
+                <field name="status" widget="badge" decoration-success="status == 'imported'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_view_records" type="object" string="View Records" icon="fa-list"/>
+                <button name="action_download_file" type="object" string="Download" icon="fa-download"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_visa_import_batch_form" model="ir.ui.view">
+        <field name="name">visa.import.batch.form</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <form string="Imported File" create="0">
+                <header>
+                    <button name="action_view_records" type="object" string="View Records" class="btn-primary"/>
+                    <button name="action_download_file" type="object" string="Download Original File"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="report_type"/>
+                            <field name="imported_at"/>
+                            <field name="imported_by"/>
+                        </group>
+                        <group>
+                            <field name="record_count"/>
+                            <field name="file_size"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group><field name="remarks" placeholder="Optional notes about this imported file..."/></group>
+                <notebook><page string="File Transactions" invisible="report_type != '705'"><field name="records_705_ids" nolabel="1" readonly="1"><list create="0" edit="0" delete="0" string="Transactions"><field name="report_code"/><field name="report_type"/><field name="report_name"/><field name="system_date"/><field name="release"/><field name="cpd"/><field name="bank_name"/><field name="center"/><field name="run_number"/><field name="page"/><field name="draft_type"/><field name="data_section"/><field name="account_number"/><field name="floor_limit_indicator"/><field name="crb_exception_file_indicator"/><field name="acquirer_reference_number"/><field name="acquirer_business_id"/><field name="purchase_date"/><field name="destination_amount" sum="Total Destination"/><field name="destination_currency_code"/><field name="destination_currency_id"/><field name="source_amount" sum="Total Source"/><field name="source_currency_code"/><field name="source_currency_id"/><field name="merchant_name"/><field name="merchant_city"/><field name="merchant_country_code"/><field name="merchant_category_code"/><field name="merchant_zip_code"/><field name="merchant_state_province_code"/><field name="requested_payment_service"/><field name="number_of_payment_forms"/><field name="usage_code"/><field name="chargeback_reason_code"/><field name="settlement_flag"/><field name="auth_characteristics_indicator"/><field name="authorization_code"/><field name="pos_terminal_capability"/><field name="cardholder_id_method"/><field name="collection_only_flag"/><field name="pos_entry_mode"/><field name="central_processing_date"/><field name="reimbursement_attribute"/><field name="business_format_code"/><field name="token_assurance_method"/><field name="rate_table_id"/><field name="scheme_identifier"/><field name="reserved_data"/><field name="documentation_indicator"/><field name="member_message_text"/><field name="special_condition_indicator"/><field name="fee_program_indicator"/><field name="issuer_charge"/><field name="pfx_applied_indicator"/><field name="card_acceptor_id"/><field name="terminal_id"/><field name="national_reimbursement_fee" sum="Total National Reimbursement Fee"/><field name="mail_phone_ecommerce_payment_indicator"/><field name="special_chargeback_indicator"/><field name="conversion_date"/><field name="additional_token_response"/><field name="acceptance_terminal_indicator"/><field name="prepaid_card_indicator"/><field name="service_development_field"/><field name="avs_response_code"/><field name="authorization_source_code"/><field name="purchase_id_format"/><field name="account_selection"/><field name="installment_payment_count"/><field name="purchase_identifier"/><field name="cashback" sum="Total Cashback"/><field name="chip_condition_code"/><field name="pos_environment"/><field name="transaction_identifier"/><field name="authorized_amount" sum="Total Authorized"/><field name="auth_currency_code"/><field name="auth_currency_id"/><field name="ecommerce_goods_indicator"/><field name="merchant_verification_value"/><field name="interchange_fee_amount" sum="Total Interchange Fee"/><field name="interchange_fee_sign"/><field name="authorization_response_code"/><field name="validation_code"/><field name="excluded_transaction_id_reason"/><field name="crs_processing_code"/><field name="chargeback_rights_indicator"/><field name="multiple_clearing_sequence_number"/><field name="multiple_clearing_sequence_count"/><field name="market_specific_authorization_data"/><field name="total_authorized_amount" sum="Total Authorized Amount"/><field name="information_indicator"/><field name="merchant_telephone_number"/><field name="additional_data_indicator"/><field name="merchant_volume_indicator"/><field name="source_to_base_currency_exchange_rate"/><field name="base_to_destination_currency_exchange_rate"/><field name="optional_issuer_isa_amount" sum="Total Optional Issuer ISA"/><field name="product_id_code"/><field name="program_id"/><field name="dynamic_currency_conversion_indicator"/><field name="account_type_identification"/><field name="spend_qualified_indicator"/><field name="pan_token"/><field name="account_funding_source"/><field name="cvv2_result_code"/><field name="active" column_invisible="1"/></list></field></page><page string="File Transactions" invisible="report_type != '706'"><field name="records_706_ids" nolabel="1" readonly="1"><list create="0" edit="0" delete="0" string="Transactions"><field name="report_code"/><field name="report_type"/><field name="report_name"/><field name="system_date"/><field name="release"/><field name="cpd"/><field name="bank_name"/><field name="center"/><field name="run_number"/><field name="page"/><field name="draft_type"/><field name="data_section"/><field name="source_transaction_type"/><field name="account_number"/><field name="floor_limit_indicator"/><field name="crb_exception_file_indicator"/><field name="acquirer_reference_number"/><field name="acquirer_business_id"/><field name="purchase_date"/><field name="destination_amount" sum="Total Destination"/><field name="destination_currency_code"/><field name="destination_currency_id"/><field name="source_amount" sum="Total Source"/><field name="source_currency_code"/><field name="source_currency_id"/><field name="merchant_name"/><field name="merchant_city"/><field name="merchant_country_code"/><field name="merchant_category_code"/><field name="merchant_zip_code"/><field name="merchant_state_province_code"/><field name="requested_payment_service"/><field name="number_of_payment_forms"/><field name="usage_code"/><field name="chargeback_reason_code"/><field name="settlement_flag"/><field name="auth_characteristics_indicator"/><field name="authorization_code"/><field name="pos_terminal_capability"/><field name="cardholder_id_method"/><field name="collection_only_flag"/><field name="pos_entry_mode"/><field name="central_processing_date"/><field name="reimbursement_attribute"/><field name="business_format_code"/><field name="token_assurance_method"/><field name="rate_table_id"/><field name="scheme_identifier"/><field name="reserved_data"/><field name="documentation_indicator"/><field name="member_message_text"/><field name="special_condition_indicator"/><field name="fee_program_indicator"/><field name="issuer_charge"/><field name="pfx_applied_indicator"/><field name="card_acceptor_id"/><field name="terminal_id"/><field name="national_reimbursement_fee" sum="Total National Reimbursement Fee"/><field name="mail_phone_ecommerce_payment_indicator"/><field name="special_chargeback_indicator"/><field name="conversion_date"/><field name="additional_token_response"/><field name="acceptance_terminal_indicator"/><field name="prepaid_card_indicator"/><field name="service_development_field"/><field name="avs_response_code"/><field name="authorization_source_code"/><field name="purchase_id_format"/><field name="account_selection"/><field name="installment_payment_count"/><field name="purchase_identifier"/><field name="cashback" sum="Total Cashback"/><field name="chip_condition_code"/><field name="pos_environment"/><field name="service_processing_type"/><field name="fast_funds_indicator"/><field name="industry_business_format_code"/><field name="business_application_id"/><field name="source_of_funds"/><field name="payment_reversal_reason"/><field name="sender_reference_number"/><field name="sender_account_number"/><field name="sender_name"/><field name="sender_address"/><field name="sender_city"/><field name="sender_state"/><field name="sender_country"/><field name="transaction_identifier"/><field name="authorized_amount" sum="Total Authorized"/><field name="auth_currency_code"/><field name="auth_currency_id"/><field name="ecommerce_goods_indicator"/><field name="merchant_verification_value"/><field name="interchange_fee_amount" sum="Total Interchange Fee"/><field name="interchange_fee_sign"/><field name="authorization_response_code"/><field name="validation_code"/><field name="excluded_transaction_id_reason"/><field name="crs_processing_code"/><field name="chargeback_rights_indicator"/><field name="multiple_clearing_sequence_number"/><field name="multiple_clearing_sequence_count"/><field name="market_specific_authorization_data"/><field name="total_authorized_amount" sum="Total Authorized Amount"/><field name="information_indicator"/><field name="merchant_telephone_number"/><field name="additional_data_indicator"/><field name="merchant_volume_indicator"/><field name="source_to_base_currency_exchange_rate"/><field name="base_to_destination_currency_exchange_rate"/><field name="optional_issuer_isa_amount" sum="Total Optional Issuer ISA"/><field name="product_id_code"/><field name="program_id"/><field name="dynamic_currency_conversion_indicator"/><field name="account_type_identification"/><field name="spend_qualified_indicator"/><field name="pan_token"/><field name="account_funding_source"/><field name="cvv2_result_code"/></list></field></page><page string="File Transactions" invisible="report_type != '707'"><field name="records_707_ids" nolabel="1" readonly="1"><list create="0" edit="0" delete="0" string="Transactions"><field name="report_code"/><field name="report_type"/><field name="report_name"/><field name="system_date"/><field name="release"/><field name="cpd"/><field name="bank_name"/><field name="center"/><field name="run_number"/><field name="page"/><field name="draft_type"/><field name="data_section"/><field name="account_number"/><field name="floor_limit_indicator"/><field name="crb_exception_file_indicator"/><field name="acquirer_reference_number"/><field name="acquirer_business_id"/><field name="purchase_date"/><field name="destination_amount" sum="Total Destination Amount"/><field name="destination_currency_code"/><field name="destination_currency_id"/><field name="source_amount" sum="Total Source Amount"/><field name="source_currency_code"/><field name="source_currency_id"/><field name="merchant_name"/><field name="merchant_city"/><field name="merchant_country_code"/><field name="merchant_category_code"/><field name="merchant_zip_code"/><field name="merchant_state_province_code"/><field name="requested_payment_service"/><field name="number_of_payment_forms"/><field name="usage_code"/><field name="chargeback_reason_code"/><field name="settlement_flag"/><field name="auth_characteristics_indicator"/><field name="authorization_code"/><field name="pos_terminal_capability"/><field name="cardholder_id_method"/><field name="collection_only_flag"/><field name="pos_entry_mode"/><field name="central_processing_date"/><field name="reimbursement_attribute"/><field name="business_format_code"/><field name="token_assurance_method"/><field name="rate_table_id"/><field name="scheme_identifier"/><field name="reserved_data"/><field name="documentation_indicator"/><field name="member_message_text"/><field name="special_condition_indicator"/><field name="fee_program_indicator"/><field name="issuer_charge"/><field name="pfx_applied_indicator"/><field name="card_acceptor_id"/><field name="terminal_id"/><field name="national_reimbursement_fee" sum="Total National Reimbursement Fee"/><field name="mail_phone_ecommerce_payment_indicator"/><field name="special_chargeback_indicator"/><field name="conversion_date"/><field name="additional_token_response"/><field name="acceptance_terminal_indicator"/><field name="prepaid_card_indicator"/><field name="service_development_field"/><field name="avs_response_code"/><field name="authorization_source_code"/><field name="purchase_id_format"/><field name="account_selection"/><field name="installment_payment_count"/><field name="purchase_identifier"/><field name="cashback" sum="Total Cashback"/><field name="chip_condition_code"/><field name="pos_environment"/><field name="transaction_identifier"/><field name="authorized_amount" sum="Total Authorized Amount"/><field name="auth_currency_code"/><field name="auth_currency_id"/><field name="ecommerce_goods_indicator"/><field name="merchant_verification_value"/><field name="interchange_fee_amount" sum="Total Interchange Fee"/><field name="interchange_fee_sign"/><field name="authorization_response_code"/><field name="validation_code"/><field name="excluded_transaction_id_reason"/><field name="crs_processing_code"/><field name="chargeback_rights_indicator"/><field name="multiple_clearing_sequence_number"/><field name="multiple_clearing_sequence_count"/><field name="market_specific_authorization_data"/><field name="total_authorized_amount" sum="Total Authorized Amount"/><field name="information_indicator"/><field name="merchant_telephone_number"/><field name="additional_data_indicator"/><field name="merchant_volume_indicator"/><field name="source_to_base_currency_exchange_rate"/><field name="base_to_destination_currency_exchange_rate"/><field name="optional_issuer_isa_amount" sum="Total Optional Issuer ISA Amount"/><field name="product_id_code"/><field name="program_id"/><field name="dynamic_currency_conversion_indicator"/><field name="account_type_identification"/><field name="spend_qualified_indicator"/><field name="pan_token"/><field name="account_funding_source"/><field name="cvv2_result_code"/><field name="transaction_type"/><field name="card_sequence_number"/><field name="terminal_transaction_date"/><field name="terminal_capability_profile"/><field name="terminal_country_code"/><field name="terminal_serial_number"/><field name="unpredictable_number"/><field name="application_transaction_counter"/><field name="application_interchange_profile"/><field name="cryptogram"/><field name="issuer_application_data_byte_2"/><field name="issuer_application_data_byte_3"/><field name="terminal_verification_results"/><field name="issuer_application_data_byte_4_7"/><field name="cryptogram_amount"/><field name="issuer_application_data_byte_8"/><field name="issuer_application_data_byte_9_16"/><field name="issuer_application_data_byte_1"/><field name="issuer_application_data_byte_17"/><field name="issuer_application_data_byte_18_32"/><field name="form_factor_indicator"/><field name="issuer_script_1_results"/></list></field></page><page string="File Transactions" invisible="report_type != '725'"><field name="records_725_ids" nolabel="1" readonly="1"><list create="0" edit="0" delete="0" string="Transactions"><field name="report_code"/><field name="report_type"/><field name="report_name"/><field name="system_date"/><field name="release"/><field name="cpd"/><field name="bank_name"/><field name="center"/><field name="run_number"/><field name="page"/><field name="draft_type"/><field name="data_section"/><field name="account_number"/><field name="floor_limit_indicator"/><field name="crb_exception_file_indicator"/><field name="acquirer_reference_number"/><field name="acquirer_business_id"/><field name="purchase_date"/><field name="destination_amount" sum="Total Destination Amount"/><field name="destination_currency_code"/><field name="destination_currency_id"/><field name="source_amount" sum="Total Source Amount"/><field name="source_currency_code"/><field name="source_currency_id"/><field name="merchant_name"/><field name="merchant_city"/><field name="merchant_country_code"/><field name="merchant_category_code"/><field name="merchant_zip_code"/><field name="merchant_state_province_code"/><field name="requested_payment_service"/><field name="number_of_payment_forms"/><field name="usage_code"/><field name="chargeback_reason_code"/><field name="settlement_flag"/><field name="auth_characteristics_indicator"/><field name="authorization_code"/><field name="pos_terminal_capability"/><field name="cardholder_id_method"/><field name="collection_only_flag"/><field name="pos_entry_mode"/><field name="central_processing_date"/><field name="reimbursement_attribute"/><field name="business_format_code"/><field name="token_assurance_method"/><field name="rate_table_id"/><field name="scheme_identifier"/><field name="reserved_data"/><field name="documentation_indicator"/><field name="member_message_text"/><field name="special_condition_indicator"/><field name="fee_program_indicator"/><field name="issuer_charge"/><field name="pfx_applied_indicator"/><field name="card_acceptor_id"/><field name="terminal_id"/><field name="national_reimbursement_fee" sum="Total National Reimbursement Fee"/><field name="mail_phone_ecommerce_payment_indicator"/><field name="special_chargeback_indicator"/><field name="conversion_date"/><field name="additional_token_response"/><field name="acceptance_terminal_indicator"/><field name="prepaid_card_indicator"/><field name="service_development_field"/><field name="avs_response_code"/><field name="authorization_source_code"/><field name="purchase_id_format"/><field name="account_selection"/><field name="installment_payment_count"/><field name="purchase_identifier"/><field name="cashback" sum="Total Cashback"/><field name="chip_condition_code"/><field name="pos_environment"/><field name="transaction_identifier"/><field name="authorized_amount" sum="Total Authorized Amount"/><field name="auth_currency_code"/><field name="auth_currency_id"/><field name="ecommerce_goods_indicator"/><field name="merchant_verification_value"/><field name="interchange_fee_amount" sum="Total Interchange Fee"/><field name="interchange_fee_sign"/><field name="authorization_response_code"/><field name="validation_code"/><field name="excluded_transaction_id_reason"/><field name="crs_processing_code"/><field name="chargeback_rights_indicator"/><field name="multiple_clearing_sequence_number"/><field name="multiple_clearing_sequence_count"/><field name="market_specific_authorization_data"/><field name="total_authorized_amount" sum="Total Authorized Amount"/><field name="information_indicator"/><field name="merchant_telephone_number"/><field name="additional_data_indicator"/><field name="merchant_volume_indicator"/><field name="source_to_base_currency_exchange_rate"/><field name="base_to_destination_currency_exchange_rate"/><field name="optional_issuer_isa_amount" sum="Total Optional Issuer ISA Amount"/><field name="product_id_code"/><field name="program_id"/><field name="dynamic_currency_conversion_indicator"/><field name="account_type_identification"/><field name="spend_qualified_indicator"/><field name="pan_token"/><field name="account_funding_source"/><field name="cvv2_result_code"/><field name="transaction_type"/><field name="card_sequence_number"/><field name="terminal_transaction_date"/><field name="terminal_capability_profile"/><field name="terminal_country_code"/><field name="terminal_serial_number"/><field name="unpredictable_number"/><field name="application_transaction_counter"/><field name="application_interchange_profile"/><field name="cryptogram"/><field name="issuer_application_data_byte_2"/><field name="issuer_application_data_byte_3"/><field name="terminal_verification_results"/><field name="issuer_application_data_byte_4_7"/><field name="cryptogram_amount"/><field name="issuer_application_data_byte_8"/><field name="issuer_application_data_byte_9_16"/><field name="issuer_application_data_byte_1"/><field name="issuer_application_data_byte_17"/><field name="issuer_application_data_byte_18_32"/><field name="form_factor_indicator"/><field name="issuer_script_1_results"/><field name="source_file_name"/><field name="source_line_number"/><field name="imported_at"/><field name="company_id"/><field name="active" column_invisible="1"/></list></field></page><page string="File Transactions" invisible="report_type != '727'"><field name="records_727_ids" nolabel="1" readonly="1"><list create="0" edit="0" delete="0" string="Transactions"><field name="report_code"/><field name="report_type"/><field name="report_name"/><field name="system_date"/><field name="release"/><field name="cpd"/><field name="bank_name"/><field name="center"/><field name="run_number"/><field name="page"/><field name="draft_type"/><field name="data_section"/><field name="account_number"/><field name="floor_limit_indicator"/><field name="crb_exception_file_indicator"/><field name="acquirer_reference_number"/><field name="acquirer_business_id"/><field name="purchase_date"/><field name="destination_amount" sum="Total Destination Amount"/><field name="destination_currency_code"/><field name="destination_currency_id"/><field name="source_amount" sum="Total Source Amount"/><field name="source_currency_code"/><field name="source_currency_id"/><field name="merchant_name"/><field name="merchant_city"/><field name="merchant_country_code"/><field name="merchant_category_code"/><field name="merchant_zip_code"/><field name="merchant_state_province_code"/><field name="requested_payment_service"/><field name="number_of_payment_forms"/><field name="usage_code"/><field name="chargeback_reason_code"/><field name="settlement_flag"/><field name="auth_characteristics_indicator"/><field name="authorization_code"/><field name="pos_terminal_capability"/><field name="cardholder_id_method"/><field name="collection_only_flag"/><field name="pos_entry_mode"/><field name="central_processing_date"/><field name="reimbursement_attribute"/><field name="business_format_code"/><field name="token_assurance_method"/><field name="rate_table_id"/><field name="scheme_identifier"/><field name="reserved_data"/><field name="documentation_indicator"/><field name="member_message_text"/><field name="special_condition_indicator"/><field name="fee_program_indicator"/><field name="issuer_charge"/><field name="pfx_applied_indicator"/><field name="card_acceptor_id"/><field name="terminal_id"/><field name="national_reimbursement_fee" sum="Total National Reimbursement Fee"/><field name="mail_phone_ecommerce_payment_indicator"/><field name="special_chargeback_indicator"/><field name="conversion_date"/><field name="additional_token_response"/><field name="acceptance_terminal_indicator"/><field name="prepaid_card_indicator"/><field name="service_development_field"/><field name="avs_response_code"/><field name="authorization_source_code"/><field name="purchase_id_format"/><field name="account_selection"/><field name="installment_payment_count"/><field name="purchase_identifier"/><field name="cashback" sum="Total Cashback"/><field name="chip_condition_code"/><field name="pos_environment"/><field name="transaction_identifier"/><field name="authorized_amount" sum="Total Authorized Amount"/><field name="auth_currency_code"/><field name="auth_currency_id"/><field name="ecommerce_goods_indicator"/><field name="merchant_verification_value"/><field name="interchange_fee_amount" sum="Total Interchange Fee"/><field name="interchange_fee_sign"/><field name="authorization_response_code"/><field name="validation_code"/><field name="excluded_transaction_id_reason"/><field name="crs_processing_code"/><field name="chargeback_rights_indicator"/><field name="multiple_clearing_sequence_number"/><field name="multiple_clearing_sequence_count"/><field name="market_specific_authorization_data"/><field name="total_authorized_amount" sum="Total Authorized Amount"/><field name="information_indicator"/><field name="merchant_telephone_number"/><field name="additional_data_indicator"/><field name="merchant_volume_indicator"/><field name="source_to_base_currency_exchange_rate"/><field name="base_to_destination_currency_exchange_rate"/><field name="optional_issuer_isa_amount" sum="Total Optional Issuer ISA Amount"/><field name="product_id_code"/><field name="program_id"/><field name="dynamic_currency_conversion_indicator"/><field name="account_type_identification"/><field name="spend_qualified_indicator"/><field name="pan_token"/><field name="account_funding_source"/><field name="cvv2_result_code"/><field name="transaction_type"/><field name="card_sequence_number"/><field name="terminal_transaction_date"/><field name="terminal_capability_profile"/><field name="terminal_country_code"/><field name="terminal_serial_number"/><field name="unpredictable_number"/><field name="application_transaction_counter"/><field name="application_interchange_profile"/><field name="cryptogram"/><field name="issuer_application_data_byte_2"/><field name="issuer_application_data_byte_3"/><field name="terminal_verification_results"/><field name="issuer_application_data_byte_4_7"/><field name="cryptogram_amount"/><field name="issuer_application_data_byte_8"/><field name="issuer_application_data_byte_9_16"/><field name="issuer_application_data_byte_1"/><field name="issuer_application_data_byte_17"/><field name="issuer_application_data_byte_18_32"/><field name="form_factor_indicator"/><field name="issuer_script_1_results"/><field name="source_file_name"/><field name="source_line_number"/><field name="imported_at"/><field name="company_id"/><field name="active" column_invisible="1"/></list></field></page></notebook></sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_visa_import_batch_search" model="ir.ui.view">
+        <field name="name">visa.import.batch.search</field>
+        <field name="model">visa.import.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="report_type"/>
+                <field name="imported_by"/>
+                <filter name="group_report" string="Report Type" context="{'group_by':'report_type'}"/>
+                <filter name="group_importer" string="Imported By" context="{'group_by':'imported_by'}"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_imported_files_705" model="ir.actions.act_window">
+        <field name="name">VX-705 / Imported Files</field>
+        <field name="res_model">visa.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('report_type','=','705')]</field>
+        <field name="context">{'default_report_type':'705'}</field>
+        <field name="search_view_id" ref="view_visa_import_batch_search"/>
+    <field name="view_id" ref="view_visa_import_batch_list_705"/></record>
+    <record id="action_imported_files_706" model="ir.actions.act_window">
+        <field name="name">VX-706 / Imported Files</field>
+        <field name="res_model">visa.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('report_type','=','706')]</field>
+        <field name="context">{'default_report_type':'706'}</field>
+        <field name="search_view_id" ref="view_visa_import_batch_search"/>
+    <field name="view_id" ref="view_visa_import_batch_list_706"/></record>
+    <record id="action_imported_files_707" model="ir.actions.act_window">
+        <field name="name">VX-707 / Imported Files</field>
+        <field name="res_model">visa.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('report_type','=','707')]</field>
+        <field name="context">{'default_report_type':'707'}</field>
+        <field name="search_view_id" ref="view_visa_import_batch_search"/>
+    <field name="view_id" ref="view_visa_import_batch_list_707"/></record>
+    <record id="action_imported_files_725" model="ir.actions.act_window">
+        <field name="name">VX-725 / Imported Files</field>
+        <field name="res_model">visa.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('report_type','=','725')]</field>
+        <field name="context">{'default_report_type':'725'}</field>
+        <field name="search_view_id" ref="view_visa_import_batch_search"/>
+    <field name="view_id" ref="view_visa_import_batch_list_725"/></record>
+    <record id="action_imported_files_727" model="ir.actions.act_window">
+        <field name="name">VX-727 / Imported Files</field>
+        <field name="res_model">visa.import.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('report_type','=','727')]</field>
+        <field name="context">{'default_report_type':'727'}</field>
+        <field name="search_view_id" ref="view_visa_import_batch_search"/>
+    <field name="view_id" ref="view_visa_import_batch_list_727"/></record>
+    
+</odoo>

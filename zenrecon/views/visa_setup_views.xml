@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_visa_setup_search" model="ir.ui.view">
+        <field name="name">bsr.visa.setup.search</field>
+        <field name="model">bsr.visa.setup</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reporting_for_option_ids"/>
+                <field name="business_owner"/>
+                <field name="product_type"/>
+                <field name="card_type"/>
+                <group>
+                    <filter name="group_business_owner" string="Business Owner" context="{'group_by': 'business_owner'}"/>
+                    <filter name="group_product_type" string="Product Type" context="{'group_by': 'product_type'}"/>
+                    <filter name="group_card_type" string="Card Type" context="{'group_by': 'card_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_visa_setup_list" model="ir.ui.view">
+        <field name="name">bsr.visa.setup.list</field>
+        <field name="model">bsr.visa.setup</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" string="VISA Setup" default_order="sequence,id">
+                <field name="sequence" widget="handle"/>
+                <field name="company_id" column_invisible="True"/>
+                <field name="reporting_for_option_ids" widget="many2many_tags" required="1"
+                       domain="[('company_id', '=', company_id), ('field_name', '=', 'reporting_for')]"
+                       options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="rollup_to_option_ids" widget="many2many_tags" required="1"
+                       domain="[('company_id', '=', company_id), ('field_name', '=', 'rollup_to')]"
+                       options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="funds_xfer_entity_option_ids" widget="many2many_tags" required="1"
+                       domain="[('company_id', '=', company_id), ('field_name', '=', 'funds_xfer_entity')]"
+                       options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="business_owner" required="1"/>
+                <field name="product_type" required="1"/>
+                <field name="card_type" required="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_configuration_group_wizard_form" model="ir.ui.view">
+        <field name="name">bsr.configuration.group.wizard.form</field>
+        <field name="model">bsr.configuration.group.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manage VISA Group">
+                <group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="configuration_ids" widget="many2many_tags" readonly="1"/>
+                    <field name="operation" widget="radio" options="{'horizontal': true}"/>
+                    <field name="group_id" invisible="operation == 'remove'"
+                           options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="new_group_name" invisible="operation == 'remove'"
+                           placeholder="Example: USD Voucher"/>
+                    <field name="settlement_currency" invisible="operation == 'remove'"/>
+                </group>
+                <div class="alert alert-info" role="alert" invisible="operation == 'remove'">
+                    Currency controls which groups a Voucher Run executes. Multiple groups may use the same currency.
+                </div>
+                <footer>
+                    <button name="action_apply" type="object" string="Apply" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_configuration_group_list" model="ir.ui.view">
+        <field name="name">bsr.accounting.configuration.group.list</field>
+        <field name="model">bsr.accounting.configuration.group</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="settlement_currency"/>
+                <field name="configuration_count" readonly="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bsr_visa_setup" model="ir.actions.act_window">
+        <field name="name">VISA Business Mapping</field>
+        <field name="res_model">bsr.visa.setup</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_bsr_visa_setup_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add the permanent VISA business mapping.</p>
+            <p>The first three values come from VISA Configuration; enter the friendly Business Owner, Product Type, and Card Type names.</p>
+        </field>
+    </record>
+</odoo>

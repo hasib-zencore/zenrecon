@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_ipm_import_search" model="ir.ui.view">
+        <field name="name">bsr.ipm.import.search</field>
+        <field name="model">bsr.ipm.import</field>
+        <field name="arch" type="xml">
+            <search string="Search Mastercard Imports">
+                <field name="name"/><field name="file_name"/><field name="attachment_id" string="Source File"/><field name="file_hash"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="With Errors" name="partial" domain="[('state', '=', 'partial')]"/>
+                <filter string="Failed" name="failed" domain="[('state', '=', 'failed')]"/>
+                <separator/>
+                <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                <filter string="Encoding" name="group_encoding" context="{'group_by': 'input_encoding'}"/>
+                <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_ipm_import_list" model="ir.ui.view">
+        <field name="name">bsr.ipm.import.list</field>
+        <field name="model">bsr.ipm.import</field>
+        <field name="arch" type="xml">
+            <list string="Mastercard Imports" create="false" delete="false">
+                <field name="name"/><field name="file_name"/><field name="attachment_id" string="Source File" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'completed'"
+                       decoration-warning="state == 'partial'" decoration-danger="state == 'failed'"/>
+                <field name="input_encoding"/><field name="record_count"/><field name="field_count"/>
+                <field name="error_count"/><field name="processing_completed_at"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_ipm_import_form" model="ir.ui.view">
+        <field name="name">bsr.ipm.import.form</field>
+        <field name="model">bsr.ipm.import</field>
+        <field name="arch" type="xml">
+            <form string="Mastercard Import" create="false" delete="false">
+                <header>
+                    <button name="action_process" string="Process / Rebuild" type="object" icon="fa-play"
+                            class="btn-primary" invisible="state == 'processing'"/>
+                    <button name="action_download_complete_xlsx" string="Download Complete XLSX" type="object"
+                            icon="fa-download" class="btn-secondary" invisible="record_count == 0"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,completed,partial,failed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_records" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="record_count" widget="statinfo" string="Records"/>
+                        </button>
+                        <button name="action_open_fields" type="object" class="oe_stat_button" icon="fa-table">
+                            <field name="field_count" widget="statinfo" string="Data Elements"/>
+                        </button>
+                        <button name="action_open_errors" type="object" class="oe_stat_button" icon="fa-exclamation-triangle"
+                                invisible="error_count == 0">
+                            <field name="error_count" widget="statinfo" string="Parse Errors"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+                    <group>
+                        <group string="Source File">
+                            <field name="attachment_id" readonly="1"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="file_name"/><field name="file_size"/>
+                            <field name="file_hash"/>
+                        </group>
+                        <group string="Parser Audit">
+                            <field name="physical_block_size"/><field name="data_bytes_per_block"/>
+                            <field name="logical_size"/><field name="input_encoding"/><field name="parser_version"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Stored Data">
+                            <field name="record_count"/><field name="field_count"/><field name="error_count"/>
+                        </group>
+                        <group string="Processing">
+                            <field name="processing_started_at"/><field name="processing_completed_at"/>
+                            <field name="create_uid" string="Imported By"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="processing_message" nolabel="1" readonly="1"/>
+                    <div class="alert alert-info" role="alert">
+                        Parsed with the supplied Mastercard CMS/IPM rules: 1014-byte physical blocks, 1012 data bytes, RDW records, and ISO 8583:1993. Full PAN and raw record payloads are never stored.
+                    </div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_ipm_import" model="ir.actions.act_window">
+        <field name="name">IPM Import History</field>
+        <field name="res_model">bsr.ipm.import</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bsr_ipm_import_search"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Upload a Mastercard IPM file.</p></field>
+    </record>
+
+    <record id="view_bsr_ipm_record_search" model="ir.ui.view">
+        <field name="name">bsr.ipm.record.search</field><field name="model">bsr.ipm.record</field>
+        <field name="arch" type="xml"><search string="Search IPM Records">
+            <field name="import_id"/><field name="mti"/><field name="function_code"/><field name="record_type"/>
+            <field name="pan_masked"/><field name="rrn"/><field name="stan"/>
+            <filter string="Errors" name="errors" domain="[('parse_status', '=', 'error')]"/>
+            <filter string="Record Type" name="group_type" context="{'group_by': 'record_type'}"/>
+        </search></field>
+    </record>
+    <record id="view_bsr_ipm_record_list" model="ir.ui.view">
+        <field name="name">bsr.ipm.record.list</field><field name="model">bsr.ipm.record</field>
+        <field name="arch" type="xml"><list string="Mastercard IPM Records" create="false" edit="false" delete="false">
+            <header>
+                <button name="action_download_complete_xlsx" string="Download Complete XLSX" type="object"
+                        icon="fa-download" class="btn-primary"/>
+            </header>
+            <field name="import_id"/><field name="record_no"/><field name="logical_offset"/>
+            <field name="mti"/><field name="function_code"/><field name="record_type"/>
+            <field name="pan_masked"/><field name="processing_code" optional="show"/>
+            <field name="transaction_amount"/><field name="transaction_currency"/>
+            <field name="settlement_amount"/><field name="settlement_currency"/>
+            <field name="stan" optional="show"/><field name="rrn" optional="show"/>
+            <field name="parse_status" widget="badge" decoration-success="parse_status == 'parsed'"
+                   decoration-warning="parse_status == 'remainder'" decoration-danger="parse_status == 'error'"/>
+        </list></field>
+    </record>
+    <record id="view_bsr_ipm_record_form" model="ir.ui.view">
+        <field name="name">bsr.ipm.record.form</field><field name="model">bsr.ipm.record</field>
+        <field name="arch" type="xml"><form string="Mastercard IPM Record" create="false" edit="false" delete="false">
+            <header><button name="action_download_complete_xlsx" string="Download Complete XLSX" type="object" icon="fa-download" class="btn-primary"/></header><sheet>
+            <group><group><field name="import_id"/><field name="record_no"/><field name="logical_offset"/><field name="declared_length"/>
+                <field name="input_encoding"/><field name="parse_status"/></group>
+                <group><field name="mti"/><field name="function_code"/><field name="record_type"/><field name="bitmap_hex"/><field name="pan_masked"/></group></group>
+            <group><group><field name="processing_code"/><field name="transaction_amount"/><field name="transaction_currency"/></group>
+                <group><field name="settlement_amount"/><field name="settlement_currency"/><field name="stan"/><field name="rrn"/><field name="transaction_datetime"/></group></group>
+            <field name="error_message" invisible="not error_message"/>
+            <field name="field_ids" readonly="1"><list create="false" edit="false" delete="false"><field name="field_no"/><field name="field_type"/><field name="data_class"/><field name="field_length"/><field name="value_text"/></list></field>
+        </sheet></form></field>
+    </record>
+    <record id="action_bsr_ipm_record" model="ir.actions.act_window">
+        <field name="name">IPM Transactions</field><field name="res_model">bsr.ipm.record</field>
+        <field name="view_mode">list,form</field><field name="search_view_id" ref="view_bsr_ipm_record_search"/>
+    </record>
+
+    <record id="view_bsr_ipm_field_list" model="ir.ui.view">
+        <field name="name">bsr.ipm.field.list</field><field name="model">bsr.ipm.field</field>
+        <field name="arch" type="xml"><list string="Mastercard IPM Data Elements" create="false" edit="false" delete="false">
+            <field name="import_id"/><field name="record_id"/><field name="field_no"/><field name="field_type"/>
+            <field name="data_class"/><field name="field_length"/><field name="value_text"/>
+        </list></field>
+    </record>
+    <record id="action_bsr_ipm_field" model="ir.actions.act_window">
+        <field name="name">Mastercard IPM Data Elements</field><field name="res_model">bsr.ipm.field</field><field name="view_mode">list</field>
+    </record>
+
+    <record id="view_bsr_ipm_error_list" model="ir.ui.view">
+        <field name="name">bsr.ipm.parse.error.list</field><field name="model">bsr.ipm.parse.error</field>
+        <field name="arch" type="xml"><list string="Mastercard IPM Parse Errors" create="false" edit="false" delete="false">
+            <field name="import_id"/><field name="record_id"/><field name="record_no"/><field name="logical_offset"/>
+            <field name="error_stage"/><field name="error_message"/>
+        </list></field>
+    </record>
+    <record id="action_bsr_ipm_error" model="ir.actions.act_window">
+        <field name="name">IPM Parsing Errors</field><field name="res_model">bsr.ipm.parse.error</field><field name="view_mode">list</field>
+    </record>
+</odoo>

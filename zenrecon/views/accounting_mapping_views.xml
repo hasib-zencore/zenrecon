@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_accounting_configuration_search" model="ir.ui.view">
+        <field name="name">bsr.accounting.configuration.search</field>
+        <field name="model">bsr.accounting.configuration</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_import_id"/>
+                <field name="source_report_codes"/>
+                <field name="report_id_filter"/>
+                <field name="product_type"/>
+                <field name="reporting_for"/>
+                <field name="configuration_group_id"/>
+                <filter string="Ready" name="ready" domain="[('state', '=', 'ready')]"/>
+                <filter string="Needs GL" name="matched" domain="[('state', '=', 'matched')]"/>
+                <group>
+                    <filter string="Voucher Group" name="group_configuration"
+                            context="{'group_by': 'configuration_group_id'}"/>
+                    <filter string="Source Reports" name="group_report" context="{'group_by': 'source_report_codes'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_configuration_list" model="ir.ui.view">
+        <field name="name">bsr.accounting.configuration.list</field>
+        <field name="model">bsr.accounting.configuration</field>
+        <field name="arch" type="xml">
+            <list class="o_bsr_configuration_list">
+                <field name="name"/>
+                <field name="configuration_group_id" optional="hide"/>
+                <field name="source_import_id"/>
+                <field name="source_report_codes" string="Source Reports"/>
+                <field name="report_id_filter" string="Requested Reports" optional="show"/>
+                <field name="production_date"/>
+                <field name="report_date"/>
+                <field name="business_owner" optional="show"/>
+                <field name="product_type"/>
+                <field name="reporting_for" optional="show"/>
+                <field name="rule_count"/>
+                <field name="incomplete_count"/>
+                <field name="state" widget="badge" decoration-success="state == 'ready'" decoration-warning="state == 'matched'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_configuration_form" model="ir.ui.view">
+        <field name="name">bsr.accounting.configuration.form</field>
+        <field name="model">bsr.accounting.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Bank Reconciliation Accounting Setup" class="o_bsr_configuration_form">
+                <header>
+                    <button name="action_match_source" type="object" string="Match &amp; Pull Source Data"
+                            class="btn-primary" icon="fa-search" invisible="state == 'ready'"/>
+                    <button name="action_validate" type="object" string="Confirm GL &amp; Review Balance"
+                            class="btn-primary" icon="fa-check" invisible="state != 'matched'"/>
+                    <button name="action_generate_report" type="object" string="Generate Final Report"
+                            class="btn-primary" icon="fa-file-text-o" invisible="state != 'ready'"/>
+                    <button name="action_reset_draft" type="object" string="Edit / Re-match"
+                            icon="fa-pencil" invisible="state not in ('ready', 'validated', 'active', 'archived')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,matched,ready"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="READY" bg_color="text-bg-success"
+                            invisible="state != 'ready' or not is_preview_balanced"/>
+                    <widget name="web_ribbon" text="MISMATCH" bg_color="text-bg-danger"
+                            invisible="state != 'ready' or is_preview_balanced"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <div class="o_bsr_notice o_bsr_notice_info" invisible="state != 'draft'">
+                        <i class="fa fa-info-circle" title="Information" aria-hidden="true"/>
+                        <span>Select the processed EP747/BSS file, choose Report IDs, and complete only the filters needed for this voucher.</span>
+                    </div>
+                    <div class="o_bsr_notice o_bsr_notice_warning" invisible="not validation_message or state == 'ready'">
+                        <i class="fa fa-exclamation-triangle" title="Warning" aria-hidden="true"/>
+                        <field name="validation_message" nolabel="1"/>
+                    </div>
+                    <div class="o_bsr_notice o_bsr_notice_info" invisible="state != 'matched'">
+                        <i class="fa fa-pencil" title="Action required" aria-hidden="true"/>
+                        <span>Review the matched amounts, adjust DR/CR if required, then complete GL Number, GL Name, and Remarks.</span>
+                    </div>
+                    <div class="o_bsr_notice o_bsr_notice_success"
+                         invisible="state != 'ready' or not is_preview_balanced">
+                        <i class="fa fa-check-circle" title="Complete" aria-hidden="true"/>
+                        <span>Configuration complete. Debit and Credit are balanced.</span>
+                    </div>
+                    <div class="o_bsr_notice o_bsr_notice_danger"
+                         invisible="state != 'ready' or is_preview_balanced">
+                        <i class="fa fa-exclamation-circle" title="Mismatch" aria-hidden="true"/>
+                        <span>Configuration complete, but Debit and Credit do not match. The generated report will be marked as an exception.</span>
+                    </div>
+
+                    <div class="o_bsr_step_grid">
+                        <section class="o_bsr_step_card">
+                            <div class="o_bsr_step_header">
+                                <span class="o_bsr_step_number">1</span>
+                                <div>
+                                    <h3>Source selection</h3>
+                                    <p>Choose the processed file, reports, and accounting dates.</p>
+                                </div>
+                            </div>
+                            <group col="2" class="o_bsr_step_fields">
+                                <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                                <field name="configuration_group_id" options="{'no_create_edit': True}"/>
+                                <field name="source_import_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                                <field name="available_report_code_ids" invisible="1"/>
+                                <field name="report_code_ids" widget="many2many_tags" readonly="state != 'draft'"
+                                       domain="[('id', 'in', available_report_code_ids)]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="production_date" readonly="state != 'draft'"/>
+                                <field name="report_date" readonly="state != 'draft'"/>
+                                <field name="posting_date" readonly="state == 'ready'"/>
+                                <field name="report_code" invisible="1"/>
+                            </group>
+                        </section>
+
+                        <section class="o_bsr_step_card">
+                            <div class="o_bsr_step_header">
+                                <span class="o_bsr_step_number">2</span>
+                                <div>
+                                    <h3>Voucher identity</h3>
+                                    <p>Define the business context printed on the final voucher.</p>
+                                </div>
+                            </div>
+                            <group col="2" class="o_bsr_step_fields">
+                                <field name="business_owner" readonly="state != 'draft'"/>
+                                <field name="product_type" readonly="state != 'draft'"/>
+                                <field name="reporting_for" readonly="state != 'draft'"/>
+                                <field name="rollup_to" readonly="state != 'draft'"/>
+                                <field name="funds_xfer_entity" readonly="state != 'draft'"/>
+                                <field name="settlement_currency" readonly="state != 'draft'"/>
+                                <field name="remarks" placeholder="Optional general voucher remarks..."/>
+                            </group>
+                        </section>
+                    </div>
+
+                    <section class="o_bsr_step_card o_bsr_step_card_wide">
+                        <div class="o_bsr_step_header">
+                            <span class="o_bsr_step_number">3</span>
+                            <div>
+                                <h3>Optional source filters</h3>
+                                <p>No selection means Any. Select one or more exact source values; (Blank) matches empty values.</p>
+                            </div>
+                        </div>
+                        <field name="show_vss_110_amounts" invisible="1"/>
+                        <field name="show_vss_120_amounts" invisible="1"/>
+                        <field name="show_vss_130_amounts" invisible="1"/>
+                        <field name="show_vss_140_amounts" invisible="1"/>
+                        <field name="show_vss_210_amounts" invisible="1"/>
+                        <field name="show_currency_columns" invisible="1"/>
+                        <div class="o_bsr_filter_layout">
+                            <group col="2" class="o_bsr_filter_grid">
+                                <field name="clearing_currency_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_120_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'clearing_currency')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="transaction_type_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_120_amounts and not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'transaction_type')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="vss_120_source_level" readonly="state != 'draft'"
+                                       invisible="not show_vss_120_amounts"/>
+                                <field name="business_mode_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_120_amounts and not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'business_mode')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="disposition_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_120_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'disposition')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="description_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'description')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="program_network_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'program_network')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="record_type_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_110_amounts and not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'record_type')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="region_country_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_130_amounts and not show_vss_140_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'region_country')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="fee_category_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_130_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'fee_category')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="transaction_category_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'"
+                                       invisible="not show_vss_120_amounts and not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'transaction_category')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="particulars_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_110_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'particulars')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="entity_option_ids" widget="many2many_tags"
+                                       readonly="state != 'draft'" invisible="not show_vss_110_amounts"
+                                       domain="[('source_import_id', '=', source_import_id), ('report_code_ids', 'in', report_code_ids), ('field_name', '=', 'entity')]"
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                            </group>
+                            <div class="o_bsr_amount_selector">
+                                <div class="o_bsr_amount_intro"
+                                     invisible="not show_vss_110_amounts and not show_vss_120_amounts and not show_vss_130_amounts and not show_vss_140_amounts and not show_vss_210_amounts">
+                                    <strong>Amount columns</strong>
+                                    <span>Only checked columns are pulled.</span>
+                                </div>
+                                <div class="o_bsr_amount_group" invisible="not show_vss_110_amounts">
+                                    <h4>VSS-110</h4>
+                                    <group col="2">
+                                        <field name="amount_vss_110_credit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_110_debit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_110_total" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    </group>
+                                </div>
+                                <div class="o_bsr_amount_group" invisible="not show_vss_120_amounts">
+                                    <h4>VSS-120</h4>
+                                    <group col="2">
+                                        <field name="amount_vss_120_clearing" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_120_interchange_credit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_120_interchange_debit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    </group>
+                                </div>
+                                <div class="o_bsr_amount_group" invisible="not show_vss_130_amounts">
+                                    <h4>VSS-130</h4>
+                                    <group col="2">
+                                        <field name="amount_vss_130_interchange" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_130_fee_credit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_130_fee_debit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    </group>
+                                </div>
+                                <div class="o_bsr_amount_group" invisible="not show_vss_140_amounts">
+                                    <h4>VSS-140</h4>
+                                    <group col="2">
+                                        <field name="amount_vss_140_charge_credit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_140_charge_debit" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    </group>
+                                </div>
+                                <div class="o_bsr_amount_group" invisible="not show_vss_210_amounts">
+                                    <h4>VSS-210</h4>
+                                    <group col="2">
+                                        <field name="amount_vss_210_settlement_interchange" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_210_settlement_conversion" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_210_clearing_interchange" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_210_clearing_conversion" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                        <field name="amount_vss_210_optional_issuer" widget="boolean_toggle" readonly="state != 'draft'"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="o_bsr_step_card o_bsr_step_card_wide o_bsr_rules_step">
+                        <div class="o_bsr_step_header">
+                            <span class="o_bsr_step_number">4</span>
+                            <div>
+                                <h3>Accounting rules and GL mapping</h3>
+                                <p>Verify source amounts and posting direction, then complete the ledger mapping.</p>
+                            </div>
+                        </div>
+                        <div class="o_bsr_match_summary" invisible="not line_ids">
+                            <span><strong><field name="source_report_codes" class="oe_inline"/></strong> sources</span>
+                            <span><strong><field name="source_row_count" class="oe_inline"/></strong> contributions</span>
+                            <span><strong><field name="rule_count" class="oe_inline"/></strong> current rules</span>
+                            <span><strong><field name="incomplete_count" class="oe_inline"/></strong> need GL</span>
+                        </div>
+                        <div class="o_bsr_totals" invisible="not line_ids">
+                            <div class="o_bsr_total_item">
+                                <span>Debit total</span>
+                                <strong><field name="preview_debit_total" nolabel="1"/></strong>
+                            </div>
+                            <div class="o_bsr_total_item">
+                                <span>Credit total</span>
+                                <strong><field name="preview_credit_total" nolabel="1"/></strong>
+                            </div>
+                            <div class="o_bsr_total_item" decoration-success="is_preview_balanced"
+                                 decoration-danger="not is_preview_balanced">
+                                <span>Difference</span>
+                                <strong><field name="preview_difference" nolabel="1"/></strong>
+                            </div>
+                            <div class="o_bsr_total_item o_bsr_total_status">
+                                <span>Balanced</span>
+                                <field name="is_preview_balanced" nolabel="1" widget="boolean_toggle" readonly="1"/>
+                            </div>
+                        </div>
+                        <field name="show_amount_column_total_amount" invisible="1"/>
+                        <field name="show_amount_column_debit_amount" invisible="1"/>
+                        <field name="show_amount_column_credit_amount" invisible="1"/>
+                        <field name="show_amount_column_clearing_amount" invisible="1"/>
+                        <field name="show_amount_column_interchange_amount" invisible="1"/>
+                        <field name="show_amount_column_interchange_credit" invisible="1"/>
+                        <field name="show_amount_column_interchange_debit" invisible="1"/>
+                        <field name="show_amount_column_fee_credit" invisible="1"/>
+                        <field name="show_amount_column_fee_debit" invisible="1"/>
+                        <field name="show_amount_column_visa_charge_credit" invisible="1"/>
+                        <field name="show_amount_column_visa_charge_debit" invisible="1"/>
+                        <field name="show_amount_column_settlement_interchange_amount" invisible="1"/>
+                        <field name="show_amount_column_settlement_conversion_fee" invisible="1"/>
+                        <field name="show_amount_column_clearing_interchange_amount" invisible="1"/>
+                        <field name="show_amount_column_clearing_conversion_fee" invisible="1"/>
+                        <field name="show_amount_column_optional_issuer_fee" invisible="1"/>
+                        <field name="line_ids" nolabel="1"
+                               class="o_bsr_rule_list"
+                               readonly="state == 'ready'"
+                               options="{'no_create': True, 'no_create_edit': True}">
+                                <list editable="bottom" create="false" delete="false" multi_edit="1"
+                                      default_order="sequence, id"
+                                      decoration-success="configuration_status == 'configured'"
+                                      decoration-warning="configuration_status == 'incomplete'"
+                                      decoration-muted="configuration_status == 'excluded'">
+                            <field name="configuration_state" column_invisible="True"/>
+                            <field name="configuration_id" readonly="1" optional="hide"/>
+                            <field name="source_import_id" readonly="1" optional="hide"/>
+                            <field name="sequence" readonly="1" optional="hide"/>
+                            <field name="include_in_voucher" string="Use" readonly="configuration_state == 'ready'"/>
+                            <field name="report_code" string="VSS Source" readonly="1"/>
+                            <field name="record_type" string="Level" readonly="1"/>
+                            <field name="source_particulars" readonly="1" optional="hide"/>
+                            <field name="source_entity" readonly="1" optional="hide"/>
+                            <field name="business_mode" string="Mode" readonly="1"/>
+                            <field name="transaction_category" readonly="1" optional="hide"/>
+                            <field name="transaction_type" readonly="1" optional="show"/>
+                            <field name="description_match" string="Source Description" readonly="1" optional="show"/>
+                            <field name="source_direction" readonly="1" widget="badge" optional="hide"/>
+                            <field name="source_currency" readonly="1" optional="show"/>
+                            <field name="conversion_type"
+                                   readonly="configuration_state == 'ready'"
+                                   optional="show"/>
+                            <field name="posting_indicator" string="DR/CR" readonly="configuration_state == 'ready'"/>
+                            <field name="debit_amount" readonly="1"/>
+                            <field name="credit_amount" readonly="1"/>
+                            <field name="additional_amount_total_amount" column_invisible="not parent.show_amount_column_total_amount" readonly="1"/>
+                            <field name="additional_amount_debit_amount" column_invisible="not parent.show_amount_column_debit_amount" readonly="1"/>
+                            <field name="additional_amount_credit_amount" column_invisible="not parent.show_amount_column_credit_amount" readonly="1"/>
+                            <field name="additional_amount_clearing_amount" column_invisible="not parent.show_amount_column_clearing_amount" readonly="1"/>
+                            <field name="additional_amount_interchange_amount" column_invisible="not parent.show_amount_column_interchange_amount" readonly="1"/>
+                            <field name="additional_amount_interchange_credit" column_invisible="not parent.show_amount_column_interchange_credit" readonly="1"/>
+                            <field name="additional_amount_interchange_debit" column_invisible="not parent.show_amount_column_interchange_debit" readonly="1"/>
+                            <field name="additional_amount_fee_credit" column_invisible="not parent.show_amount_column_fee_credit" readonly="1"/>
+                            <field name="additional_amount_fee_debit" column_invisible="not parent.show_amount_column_fee_debit" readonly="1"/>
+                            <field name="additional_amount_visa_charge_credit" column_invisible="not parent.show_amount_column_visa_charge_credit" readonly="1"/>
+                            <field name="additional_amount_visa_charge_debit" column_invisible="not parent.show_amount_column_visa_charge_debit" readonly="1"/>
+                            <field name="additional_amount_settlement_interchange_amount" column_invisible="not parent.show_amount_column_settlement_interchange_amount" readonly="1"/>
+                            <field name="additional_amount_settlement_conversion_fee" column_invisible="not parent.show_amount_column_settlement_conversion_fee" readonly="1"/>
+                            <field name="additional_amount_clearing_interchange_amount" column_invisible="not parent.show_amount_column_clearing_interchange_amount" readonly="1"/>
+                            <field name="additional_amount_clearing_conversion_fee" column_invisible="not parent.show_amount_column_clearing_conversion_fee" readonly="1"/>
+                            <field name="additional_amount_optional_issuer_fee" column_invisible="not parent.show_amount_column_optional_issuer_fee" readonly="1"/>
+                            <field name="gl_number" readonly="configuration_state == 'ready'"/>
+                            <field name="gl_name" readonly="configuration_state == 'ready'"/>
+                            <field name="configuration_status" string="Status" readonly="1" widget="badge"
+                                   decoration-success="configuration_status == 'configured'"
+                                   decoration-warning="configuration_status == 'incomplete'"
+                                   decoration-muted="configuration_status == 'excluded'"/>
+                            <field name="debit_remarks" string="Debit Remarks" optional="show"
+                                   readonly="configuration_state == 'ready'"/>
+                            <field name="credit_remarks" string="Credit Remarks" optional="show"
+                                   readonly="configuration_state == 'ready'"/>
+                            <field name="matched_amount" optional="hide"/>
+                            <field name="clearing_currency" optional="hide"/>
+                            <field name="production_date" optional="hide"/>
+                            <field name="report_date" optional="hide"/>
+                            <field name="business_owner" optional="hide"/>
+                            <field name="product_type" optional="hide"/>
+                            <field name="reporting_for" optional="hide"/>
+                            <field name="rollup_to" optional="hide"/>
+                            <field name="funds_xfer_entity" optional="hide"/>
+                            <field name="settlement_currency" optional="hide"/>
+                            <field name="amount_source" optional="hide"/>
+                            <field name="source_row_count" optional="hide"/>
+                            <button name="action_delete_rule" type="object" icon="fa-trash"
+                                    string="Delete" title="Delete this accounting rule"
+                                    class="btn-link text-danger"
+                                    invisible="configuration_state == 'ready'"
+                                    confirm="Delete this accounting rule?"/>
+                                </list>
+                        </field>
+                    </section>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_accounting_configuration" model="ir.actions.act_window">
+        <field name="name">VISA Voucher Rules</field>
+        <field name="res_model">bsr.accounting.configuration</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bsr_accounting_configuration_search"/>
+        <field name="domain">[('batch_run_id', '=', False)]</field>
+        <field name="context">{'search_default_group_configuration': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a single-page VSS voucher configuration.</p>
+            <p>Select parsed source data, match it, complete GL fields, and generate the final report.</p>
+        </field>
+    </record>
+
+    <record id="action_manage_bsr_configuration_group" model="ir.actions.server">
+        <field name="name">Manage VISA Group</field>
+        <field name="model_id" ref="model_bsr_accounting_configuration"/>
+        <field name="binding_model_id" ref="model_bsr_accounting_configuration"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('group_bsr_configuration_manager'))]"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_open_configuration_group_wizard()</field>
+    </record>
+</odoo>

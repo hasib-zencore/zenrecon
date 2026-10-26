@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bsr_accounting_run_search" model="ir.ui.view">
+        <field name="name">bsr.accounting.run.search</field>
+        <field name="model">bsr.accounting.run</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_import_id"/>
+                <field name="product_type"/>
+                <field name="configuration_ids"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'done')]"/>
+                <filter string="Exception" name="exception" domain="[('state', '=', 'exception')]"/>
+                <group>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Report Date" name="group_report_date" context="{'group_by': 'report_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_run_list" model="ir.ui.view">
+        <field name="name">bsr.accounting.run.list</field>
+        <field name="model">bsr.accounting.run</field>
+        <field name="arch" type="xml">
+            <list class="o_bsr_accounting_run_list">
+                <field name="name" string="Run Reference"/>
+                <field name="business_owner_filter_id" string="Business Owner"/>
+                <field name="product_type_filter_id" string="Product Type"/>
+                <field name="card_type_filter_id" string="Card Type"/>
+                <field name="settlement_currency_scope" string="Currency"/>
+                <field name="report_date" string="Report Date"/>
+                <field name="posting_date" string="Posting Date" optional="show"/>
+                <field name="debit_total" string="Debit Total"/>
+                <field name="credit_total" string="Credit Total"/>
+                <field name="difference" string="Difference"/>
+                <field name="state" widget="badge"
+                       string="Status"
+                       decoration-success="state == 'done'" decoration-danger="state == 'exception'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_run_form" model="ir.ui.view">
+        <field name="name">bsr.accounting.run.form</field>
+        <field name="model">bsr.accounting.run</field>
+        <field name="arch" type="xml">
+            <form string="Run Voucher Configurations" class="o_bsr_configuration_form o_bsr_run_form">
+                <header>
+                    <button name="action_execute" type="object" string="Run Configurations &amp; Generate Merged Report" icon="fa-play"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_download" type="object" string="Download Merged Report"
+                            class="btn-primary" icon="fa-download" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,exception"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="GENERATED" bg_color="text-bg-success" invisible="state != 'done'"/>
+                    <widget name="web_ribbon" text="MISMATCH" bg_color="text-bg-danger" invisible="state != 'exception'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+
+                    <section class="o_bsr_step_card o_bsr_step_card_wide">
+                        <div class="o_bsr_step_header">
+                            <span class="o_bsr_step_number">1</span>
+                            <div>
+                                <h3>Voucher parameters</h3>
+                                <p>The processed file, reporting identities, and configuration groups are resolved automatically.</p>
+                            </div>
+                        </div>
+                        <group col="4" class="o_bsr_step_fields">
+                            <field name="production_date" string="Production Date" readonly="state != 'draft'"/>
+                            <field name="report_date" readonly="state != 'draft'"/>
+                            <field name="business_owner_filter_id" readonly="state != 'draft'" required="state == 'draft'"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="product_type_filter_id" readonly="state != 'draft'" required="state == 'draft'"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="card_type_filter_id" readonly="state != 'draft'" required="state == 'draft'"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="settlement_currency_scope" readonly="state != 'draft'"/>
+                        </group>
+                    </section>
+
+                    <field name="company_id" invisible="1"/>
+                    <field name="source_import_id" invisible="1"/>
+                    <field name="posting_date" invisible="1"/>
+                    <field name="product_type_selection_mode" invisible="1"/>
+                    <field name="product_type_option_ids" invisible="1"/>
+                    <field name="product_type" invisible="1"/>
+                    <field name="available_configuration_ids" invisible="1"/>
+                    <field name="configuration_ids" invisible="1"/>
+                    <field name="requested_report_ids" invisible="1"/>
+                    <field name="visa_setup_ids" invisible="1"/>
+
+                    <section class="o_bsr_step_card o_bsr_step_card_wide"
+                             invisible="settlement_currency_scope == 'bdt'">
+                        <div class="o_bsr_step_header">
+                            <span class="o_bsr_step_number">2</span>
+                            <div>
+                                <h3>Daily USD to BDT rates</h3>
+                                <p>Enter today&apos;s rates. Each configuration uses its selected conversion type.</p>
+                            </div>
+                        </div>
+                        <group col="4" class="o_bsr_step_fields">
+                            <field name="usd_buy_rate" readonly="state != 'draft'"/>
+                            <field name="usd_sale_rate" readonly="state != 'draft'"/>
+                            <field name="usd_mid_rate" readonly="state != 'draft'"/>
+                            <field name="currency_conversion_gl_number" readonly="state != 'draft'"/>
+                        </group>
+                    </section>
+
+                    <section class="o_bsr_step_card o_bsr_step_card_wide" invisible="state == 'draft'">
+                        <div class="o_bsr_step_header">
+                            <span class="o_bsr_step_number">3</span>
+                            <div>
+                                <h3>Merged result</h3>
+                                <p>Each configuration remains separate; these totals are calculated across the merged output.</p>
+                            </div>
+                        </div>
+                        <div class="o_bsr_totals">
+                            <div class="o_bsr_total_item"><span>Debit total</span><strong><field name="debit_total" nolabel="1"/></strong></div>
+                            <div class="o_bsr_total_item"><span>Credit total</span><strong><field name="credit_total" nolabel="1"/></strong></div>
+                            <div class="o_bsr_total_item" decoration-success="is_balanced" decoration-danger="not is_balanced">
+                                <span>Difference</span><strong><field name="difference" nolabel="1"/></strong>
+                            </div>
+                            <div class="o_bsr_total_item o_bsr_total_status"><span>Balanced</span><field name="is_balanced" nolabel="1" widget="boolean_toggle" readonly="1"/></div>
+                            <div class="o_bsr_total_item"><span>Generated reports</span><strong><field name="generated_report_count" nolabel="1"/></strong></div>
+                            <div class="o_bsr_total_item"><span>No activity</span><strong><field name="no_activity_count" nolabel="1"/></strong></div>
+                            <div class="o_bsr_total_item"><span>Skipped issues</span><strong><field name="blocked_configuration_count" nolabel="1"/></strong></div>
+                        </div>
+                        <field name="report_ids" nolabel="1" readonly="1">
+                            <list create="false" edit="false" delete="false"
+                                  decoration-success="state == 'balanced'" decoration-danger="state == 'exception'">
+                                <field name="name"/>
+                                <field name="configuration_id"/>
+                                <field name="source_report_codes"/>
+                                <field name="debit_total"/>
+                                <field name="credit_total"/>
+                                <field name="difference"/>
+                                <field name="state" widget="badge"/>
+                            </list>
+                        </field>
+                        <div class="o_bsr_step_header mt-4">
+                            <div>
+                                <h3>Execution audit</h3>
+                                <p>Every selected configuration is retained, including no-activity and acknowledged blocking outcomes.</p>
+                            </div>
+                        </div>
+                        <field name="generated_configuration_ids" nolabel="1" readonly="1">
+                            <list create="false" edit="false" delete="false"
+                                  decoration-success="state == 'ready'" decoration-muted="state == 'no_activity'"
+                                  decoration-danger="state == 'blocked'">
+                                <field name="template_id" string="Configuration"/>
+                                <field name="source_report_codes" string="Report IDs"/>
+                                <field name="state" string="Outcome" widget="badge"
+                                       decoration-success="state == 'ready'"
+                                       decoration-muted="state == 'no_activity'"
+                                       decoration-danger="state == 'blocked'"/>
+                                <field name="validation_message" string="Details"/>
+                            </list>
+                        </field>
+                    </section>
+                    <field name="output_file" filename="output_filename" invisible="1"/>
+                    <field name="output_filename" invisible="1"/>
+                    <field name="issues_acknowledged" invisible="1"/>
+                    <field name="issues_acknowledged_at" invisible="1"/>
+                    <field name="issues_acknowledged_by_id" invisible="1"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsr_accounting_run_review_wizard_form" model="ir.ui.view">
+        <field name="name">bsr.accounting.run.review.wizard.form</field>
+        <field name="model">bsr.accounting.run.review.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Voucher Pre-generation Review">
+                <sheet>
+                    <field name="run_id" invisible="1"/>
+                    <field name="has_blocking_issues" invisible="1"/>
+                    <div class="alert alert-danger" role="alert" invisible="not has_blocking_issues">
+                        <strong>Some configurations cannot be applied to this source file.</strong>
+                        After acknowledgment, they will be excluded, valid configurations will generate,
+                        and the voucher run will be marked Exception for review.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="has_blocking_issues">
+                        <strong>No-activity configurations were detected.</strong>
+                        They will remain in the execution audit and will not create voucher lines.
+                    </div>
+                    <group col="4">
+                        <field name="warning_count" string="No Activity" readonly="1"/>
+                        <field name="blocking_count" string="Blocking Issues" readonly="1"/>
+                    </group>
+                    <field name="issue_summary_html" nolabel="1" readonly="1"/>
+                    <div class="alert alert-info mt-3" role="alert">
+                        Acknowledgment is recorded with the operator and time. Excluded configurations remain
+                        visible in the run audit and Excel source details.
+                    </div>
+                    <field name="acknowledged"
+                           string="I acknowledge these issues and want to generate from valid configurations"/>
+                </sheet>
+                <footer>
+                    <button name="action_continue" type="object"
+                            string="Acknowledge &amp; Generate Voucher" class="btn-primary"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bsr_accounting_run" model="ir.actions.act_window">
+        <field name="name">VISA Voucher Runs</field>
+        <field name="res_model">bsr.accounting.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bsr_accounting_run_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Run one or multiple saved accounting configurations.</p>
+            <p>Choose the source once; each configuration is executed separately and combined into one report.</p>
+        </field>
+    </record>
+</odoo>

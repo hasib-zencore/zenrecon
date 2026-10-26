@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_npsb_settlement_voucher_run_search" model="ir.ui.view">
+        <field name="name">npsb.settlement.voucher.run.search</field>
+        <field name="model">npsb.settlement.voucher.run</field>
+        <field name="arch" type="xml">
+            <search string="Search NPSB Voucher Runs">
+                <field name="name"/>
+                <field name="transaction_date"/>
+                <field name="settlement_date"/>
+                <field name="source_report_id"/>
+                <filter name="generated" string="Generated" domain="[('state', '=', 'generated')]"/>
+                <filter name="exception" string="Exceptions" domain="[('state', '=', 'exception')]"/>
+                <separator/>
+                <filter name="group_settlement_date" string="Settlement Date" context="{'group_by': 'settlement_date'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_npsb_settlement_voucher_run_list" model="ir.ui.view">
+        <field name="name">npsb.settlement.voucher.run.list</field>
+        <field name="model">npsb.settlement.voucher.run</field>
+        <field name="arch" type="xml">
+            <list string="NPSB Settlement Voucher Runs" class="o_npsb_configuration_list"
+                  decoration-success="state == 'generated'"
+                  decoration-danger="state == 'exception'">
+                <field name="name"/>
+                <field name="transaction_date"/>
+                <field name="settlement_date"/>
+                <field name="source_report_id" optional="show"/>
+                <field name="configuration_count" string="Configurations"/>
+                <field name="line_count" string="Lines"/>
+                <field name="debit_total" sum="Total Debit"/>
+                <field name="credit_total" sum="Total Credit"/>
+                <field name="difference"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'generated'"
+                       decoration-danger="state == 'exception'"
+                       decoration-muted="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_npsb_settlement_voucher_run_form" model="ir.ui.view">
+        <field name="name">npsb.settlement.voucher.run.form</field>
+        <field name="model">npsb.settlement.voucher.run</field>
+        <field name="arch" type="xml">
+            <form string="NPSB Settlement Voucher Run" class="o_npsb_configuration_form">
+                <header>
+                    <button name="action_generate" type="object" string="Generate Voucher"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_download" type="object" string="Download Voucher"
+                            class="btn-primary" icon="fa-download" invisible="state == 'draft'"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft"
+                            class="btn-secondary" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,exception"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="GENERATED" bg_color="text-bg-success"
+                            invisible="state != 'generated'"/>
+                    <widget name="web_ribbon" title="EXCEPTION" bg_color="text-bg-danger"
+                            invisible="state != 'exception'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <section class="o_npsb_step_card">
+                        <div class="o_npsb_step_header">
+                            <span class="o_npsb_step_number">1</span>
+                            <div>
+                                <h3>Daily settlement dates</h3>
+                                <p>Enter both dates. The processed NPSB report and every configuration for it are resolved automatically.</p>
+                            </div>
+                        </div>
+                        <group col="4">
+                            <field name="transaction_date" readonly="state != 'draft'"/>
+                            <field name="settlement_date" readonly="state != 'draft'"/>
+                            <field name="currency_code"/>
+                            <field name="source_report_id" invisible="state == 'draft'"/>
+                        </group>
+                    </section>
+
+                    <section class="o_npsb_step_card mt-3" invisible="state == 'draft'">
+                        <div class="o_npsb_step_header">
+                            <span class="o_npsb_step_number">2</span>
+                            <div>
+                                <h3>Generated voucher</h3>
+                                <p>Amounts and ledger details are snapshot from the NPSB Summary and its configurations.</p>
+                            </div>
+                        </div>
+                        <div class="o_npsb_totals">
+                            <div><span>Configurations</span><strong><field name="configuration_count" nolabel="1"/></strong></div>
+                            <div><span>Voucher lines</span><strong><field name="line_count" nolabel="1"/></strong></div>
+                            <div><span>Debit total</span><strong><field name="debit_total" nolabel="1"/></strong></div>
+                            <div><span>Credit total</span><strong><field name="credit_total" nolabel="1"/></strong></div>
+                            <div decoration-success="is_balanced" decoration-danger="not is_balanced">
+                                <span>Difference</span><strong><field name="difference" nolabel="1"/></strong>
+                            </div>
+                            <div><span>Balanced</span><field name="is_balanced" nolabel="1" widget="boolean_toggle" readonly="1"/></div>
+                        </div>
+                        <field name="configuration_ids" widget="many2many_tags" readonly="1"/>
+                        <field name="line_ids" nolabel="1" readonly="1">
+                            <list create="false" edit="false" delete="false">
+                                <field name="sequence" widget="handle"/>
+                                <field name="configuration_id"/>
+                                <field name="business_mode" optional="show"/>
+                                <field name="delivery_channel" optional="show"/>
+                                <field name="transaction_type" optional="show"/>
+                                <field name="amount_source"/>
+                                <field name="source_row_count" optional="hide"/>
+                                <field name="posting_indicator" widget="badge"
+                                       decoration-info="posting_indicator == 'DR'"
+                                       decoration-success="posting_indicator == 'CR'"/>
+                                <field name="gl_number"/>
+                                <field name="gl_name"/>
+                                <field name="remarks" optional="show"/>
+                                <field name="debit_amount" sum="Total Debit"/>
+                                <field name="credit_amount" sum="Total Credit"/>
+                            </list>
+                        </field>
+                    </section>
+
+                    <field name="output_file" filename="output_filename" invisible="1"/>
+                    <field name="output_filename" invisible="1"/>
+                    <group invisible="state == 'draft'">
+                        <field name="generated_at" readonly="1"/>
+                        <field name="generated_by_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_npsb_settlement_voucher_run" model="ir.actions.act_window">
+        <field name="name">NPSB Voucher Runs</field>
+        <field name="res_model">npsb.settlement.voucher.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_npsb_settlement_voucher_run_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Generate the daily NPSB settlement voucher.</p>
+            <p>Enter the transaction and settlement business dates; the processed report and configurations are resolved automatically.</p>
+        </field>
+    </record>
+</odoo>
